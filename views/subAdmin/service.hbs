@@ -1,0 +1,25 @@
+<fieldset class="floral">
+  {{#each serviceData}}  
+    <input type="checkbox" class="familybox cbox" value="{{this._id}}">
+    <label>{{this.service}}</label>
+    <ul class="valuelist" style="visibility: hidden;">
+        <li>
+            <input type="checkbox" class="cbox mainoption">
+            <label>Level 2</label>
+            <ul class="suboption">
+                <li>
+                    <input type="checkbox" class="cbox">
+                    <label>Level 3</label>
+                </li>
+            </ul>
+            <ul class="suboption">
+                <li>
+                    <input type="checkbox" class="cbox">
+                    <label>Level 3</label>
+                </li>
+            </ul>
+        </li>
+       
+    </ul>
+    {{/each}}
+</fieldset>

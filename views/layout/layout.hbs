@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pets-World</title>
+
+  {{#if admin}}
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Ecart - Admin Dashboard </title>
+  <link rel="icon" href="/admin/images/favicon.ico" type="image/x-icon">
+  <link href="/admin/css/app.min.css" rel="stylesheet">
+  <link href="/admin/css/style.css" rel="stylesheet" />
+  <link href="/admin/css/styles/all-themes.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+  <link rel="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+  {{else if user}}
+
+  <link rel="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="user/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="user/css/fontawesome-all.min.css">
+  <link rel="stylesheet" type="text/css" href="user/css/iofrm-style.css">
+  <link rel="stylesheet" type="text/css" href="user/css/iofrm-theme4.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  {{else}}
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+
+  <link rel="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+  {{/if}}
+
+</head>
+
+<body>
+
+  {{#if admin}}
+  {{>admin-header}}
+  {{else if user}}
+  {{>user-header}}
+  {{else}}
+  {{>err-header}}
+  {{/if}}
+
+
+  {{#if admin}}
+
+  <script src="/admin/js/app.min.js"></script>
+  <script src="/admin/js/chart.min.js"></script>
+  <script src="/admin/js/admin.js"></script>
+  <script src="/admin/js/pages/dashboard/dashboard3.js"></script>
+  <script src="/admin/js/pages/todo/todo.js"></script>
+  <script src="/javascripts/script.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  {{else}}
+  <script src="/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script src="/bootstrap.min.js"></script>
+  <!-- jQuery -->
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <!-- BS JavaScript -->
+  <script type="text/javascript" src="js/bootstrap.js"></script>
+  <!-- Have fun using Bootstrap JS -->
+  <script data-cfasync="false"
+    src="http://brandio.io/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+  <script src="user/js/jquery.min.js"></script>
+  <script src="user/js/popper.min.js"></script>
+  <script src="user/js/bootstrap.min.js"></script>
+  <script src="user/js/main.js"></script>
+  <script src="/javascripts/script.js"></script>
+  <script src="http://localhost:3000/javascripts/script.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+  {{/if}}
+
+</body>
+
+</html>

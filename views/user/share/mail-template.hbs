@@ -1,0 +1,23 @@
+<form action="http://localhost:3000/mail-submit?key={{userId}}" , method="POST">
+    <div class="form-group">
+        <br>
+        <div class="input-group">
+            <input class="form-control" type="text" name="email" style="width: 100px;" placeholder="Domain" id="Domain">
+            <span style="background: #7ea8cc; display:table;" id="domainname">{{domainExtension}}</span>
+
+        </div>
+
+    </div>
+
+    <div class="form-button">
+        <button id="submit" type="submit" class="ibtn" onclick="mailTst(event)">Register</button>
+    </div>
+
+</form>
+<script>
+   function mailTst(e){
+       e.preventDefault()
+       console.log('button clicked')
+       alert('hai')
+   }
+</script>

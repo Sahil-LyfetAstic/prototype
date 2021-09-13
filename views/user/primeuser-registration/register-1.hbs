@@ -1,0 +1,40 @@
+<form action="service-registration" method="POST" id="service-registration">
+  <span id="error"></span>
+     <div class="form-group" >
+        <h3>Do you own a domain:</h3>
+        <input type="radio" id="true" name="domain" value="true">
+        <label for="true">yes</label><br>
+        <input type="radio" id="false" name="domain" value="false">
+        <label for="false">No</label><br>
+        <hr>
+    </div>
+    <span id="error"></span>
+      <div class="form-group" >
+        <h3>Do you have hosting facility:</h3>
+        <input type="radio" id="hosttrue" name="host" value="true">
+        <label for="hosttrue">yes</label><br>
+        <input type="radio" id="hostfalse" name="host" value="false">
+        <label for="hostfalse">No</label><br>
+        <hr>
+    </div>
+    <span id="error"></span>
+    <div class="form-group" id="email" >
+        <h3>Do you have an email created under the domain:</h3>
+        <input type="radio" id="emailtrue" name="email" value="true">
+        <label for="emailtrue">yes</label><br>
+        <input type="radio" id="emailfalse" name="email" value="false">
+        <label for="emailfalse">No</label><br>
+        <hr>
+    </div>
+<span id="error"></span>
+      <div class="form-group"  >
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="tos">
+        <label class="form-check-label" for="flexCheckDefault">
+            "Accept Terms and Conditions"
+        </label>
+    </div>
+    <span id="error"></span>
+    <div class="form-group">
+       <button class="btn btn-primary" id="service-submit">next</button>
+    </div>
+</form>
