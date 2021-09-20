@@ -6,10 +6,10 @@ const date = require("date-and-time");
 const now = new Date();
 const serviceHelper = require("../helpers/ServieHelpers");
 const keywordHelper = require("../helpers/keywordsHelpers");
-const fs = require('fs')
-const csv = require('csv-parser')
-const multer = require('multer')
-const upload = multer()
+const fs = require("fs");
+const csv = require("csvtojson");
+const multer = require("multer");
+const upload = multer({ dest: "upload/" });
 const verifyLogin = (req, res, next) => {
   if (req.session.subadmin) {
     next();
@@ -68,10 +68,9 @@ router.get("/confirm-tld", (req, res) => {
 
 router.get("/add-keyword", (req, res) => {
   keywordHelper.getCollectionName().then((data) => {
-    keywordHelper.getAprovedColl().then((coll)=>{ 
-      res.render("subAdmin/add-keyword", { admin: true, data,coll });
-    })
-  
+    keywordHelper.getAprovedColl().then((coll) => {
+      res.render("subAdmin/add-keyword", { admin: true, data, coll });
+    });
   });
 });
 
@@ -194,23 +193,45 @@ router.get("/cat-tree", (req, res) => {
   });
 });
 
-router.post('/update-collection-status',(req,res)=>{
-  console.log(req.body)
-  keywordHelper.updateColl(req.body.id,req.body.status)
-})
+router.post("/update-collection-status", (req, res) => {
+  console.log(req.body);
+  keywordHelper.updateColl(req.body.id, req.body.status);
+});
 
-router.post('/upload-keyword',upload.single('myfile'),(req,res)=>{
-  let csvData=[] 
-    const csvFile = req.file.buffer.toString();
-    console.log(req.file.buffer.toLocaleString())
-    const test = req.body.coll
-    console.log(csvFile)
-    console.log(test)
-    keywordHelper.findColl(req.body.coll).then((coll)=>{
-      keywordHelper.addCsv(coll.keyword_collection,csvFile)
+router.post("/upload-keyword", upload.single("myfile"), (req, res) => {
+  // const csvFile = req.file.buffer.toString();
+  console.log(req.body.coll)
+  let csvArray = [];
+  csv({
+    output: "line",
+    trim: true,
+  })
+    .fromFile(req.file.path)
+    .then((csvData) => {
+      for (i in csvData) {
+        let data = {
+          keyword_name: csvData[i],
+        };
+        console.log(data)
+        csvArray.push(data);
+      }
     })
-    
-})
+    .then((err) => {
+      if (err) throw err;
+      else {
+        
+        keywordHelper.findColl(req.body.coll).then((key)=>{
+          keywordHelper.addCsv(key.keyword_collection,csvArray).then((status)=>{
+            if(status === true){
+              fs.unlinkSync(req.file.path);
+              console.log('keyword added success')
+            }
+          })
+        })
+        
+      }
+    });
+});
 
 router.get("/logout", (req, res) => {
   req.session.destroy();

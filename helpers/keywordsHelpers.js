@@ -56,11 +56,12 @@ module.exports = {
             })
         })
     },
-  addCsv:(collName,csv)=>{
-      return new Promise(async(resolve,reject)=>{
-          await db.get().collection(collName).insertMany(csv).then((status)=>{
-              console.log(status)
-          })
-      })
+  addCsv:(coll,csv)=>{
+    return new Promise(async(resolve,reject)=>{
+        await db.get().collection(coll).insertMany(csv).then((data)=>{
+            if(data) resolve(true)
+            else resolve(false)
+        })
+    })
   }
 }
