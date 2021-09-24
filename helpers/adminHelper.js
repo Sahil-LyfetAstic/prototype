@@ -13,18 +13,20 @@ module.exports = {
           if (user.password == userData.password) {
             resolve(user);
           } else {
-            console.log('incorrect password')
+            console.log("incorrect password");
           }
         });
     });
   },
   addAdminUser: (userData) => {
     return new Promise((resolve, reject) => {
-      db.get().collection(collection.ADMIN_COLLECTION).insertOne(userData).then((status) => {
-        if(status) resolve(true)
-        else resolve(false)
-      })
-    })
-  }
-
+      db.get()
+        .collection(collection.ADMIN_COLLECTION)
+        .insertOne(userData)
+        .then((status) => {
+          if (status) resolve(true);
+          else resolve(false);
+        });
+    });
+  },
 };

@@ -168,7 +168,7 @@ router.post("/add-category", (req, res) => {
       serviceHelper.updateStatus(
         req.body.category,
         req.body.service,
-        collection
+        collection,
       );
     } else {
       serviceHelper
@@ -188,8 +188,8 @@ router.get("/servtst", (req, res) => {
 });
 
 router.get("/cat-tree", (req, res) => {
-  serviceHelper.getAprovedService().then((service) => {
-    res.render("subAdmin/category-tree", { admin: true, service });
+  keywordHelper.getAprovedColl().then((collName) => {
+    res.render("subAdmin/category-tree", { admin: true, collName });
   });
 });
 
@@ -200,7 +200,7 @@ router.post("/update-collection-status", (req, res) => {
 
 router.post("/upload-keyword", upload.single("myfile"), (req, res) => {
   // const csvFile = req.file.buffer.toString();
-  console.log(req.body.coll)
+  console.log(req.body.coll);
   let csvArray = [];
   csv({
     output: "line",
@@ -212,23 +212,23 @@ router.post("/upload-keyword", upload.single("myfile"), (req, res) => {
         let data = {
           keyword_name: csvData[i],
         };
-        console.log(data)
+        console.log(data);
         csvArray.push(data);
       }
     })
     .then((err) => {
       if (err) throw err;
       else {
-        
-        keywordHelper.findColl(req.body.coll).then((key)=>{
-          keywordHelper.addCsv(key.keyword_collection,csvArray).then((status)=>{
-            if(status === true){
-              fs.unlinkSync(req.file.path);
-              console.log('keyword added success')
-            }
-          })
-        })
-        
+        keywordHelper.findColl(req.body.coll).then((key) => {
+          keywordHelper
+            .addCsv(key.keyword_collection, csvArray)
+            .then((status) => {
+              if (status === true) {
+                fs.unlinkSync(req.file.path);
+                console.log("keyword added success");
+              }
+            });
+        });
       }
     });
 });

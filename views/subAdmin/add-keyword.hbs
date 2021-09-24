@@ -269,7 +269,7 @@
 
         //add category
         <div class="row clearfix" id="add-us">
-            <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6">
+            <div class="col-lg-8 col-md-12 col-sm-6 col-xs-6">
                 <div class="card">
                     <div class="header">
                         <h2>
@@ -284,10 +284,7 @@
                                 <div class="form-group">
                                     <input type="text" name="keyword_collection" id="keyword_collection"
                                         placeholder="Collection name">
-
                                 </div>
-
-
 
                                 <button type="submit" id="add-keywords" class="btn btn-primary">Confirm</button>
                             </form>
@@ -299,8 +296,12 @@
 
             </div>
 
+
+
+
+
             <div class="row clearfix" id="add-us">
-                <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6">
+                <div class="col-lg-8 col-md-12 col-sm-6 col-xs-6">
                     <div class="card">
                         <div class="header">
                             <h2>
@@ -326,7 +327,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="myFile">upload text file</label>
-                                        <input type="file" id="keyword-file" name="myfile" >
+                                        <input type="file" id="keyword-file" name="myfile">
 
                                     </div>
 
@@ -341,65 +342,65 @@
                 </div>
             </div>
 
-        </div>
 
 
 
 
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-                    <div class="header">
-                        <h2>
-                            <strong>TDL</strong> Details
-                        </h2>
-                        <ul class="header-dropdown m-r--5">
-                            <li class="dropdown">
-                                <a href="#" onClick="return false;" class="dropdown-toggle" data-toggle="dropdown"
-                                    role="button" aria-haspopup="true" aria-expanded="false">
-                                    <i class="material-icons">more_vert</i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li>
-                                        <a href="#" onClick="return false;">Action</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" onClick="return false;">Another action</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" onClick="return false;">Something else here</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="body" id="subadmin-tdl-status">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover js-basic-example dataTable"
-                                id="subadmin-tld">
-                                <thead>
-                                    <tr>
-                                        <th>TABLE_NAME</th>
 
-                                        <th>STATUS</th>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                <strong>TDL</strong> Details
+                            </h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li class="dropdown">
+                                    <a href="#" onClick="return false;" class="dropdown-toggle" data-toggle="dropdown"
+                                        role="button" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li>
+                                            <a href="#" onClick="return false;">Action</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" onClick="return false;">Another action</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" onClick="return false;">Something else here</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body" id="subadmin-tdl-status">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover js-basic-example dataTable"
+                                    id="subadmin-tld">
+                                    <thead>
+                                        <tr>
+                                            <th>TABLE_NAME</th>
 
-                                </thead>
-                                <tbody>
-                                    {{#each data}}
-                                    <tr>
-                                        <td>{{this.keyword_collection}}</td>
-                                        <td>{{this.status}}</td>
+                                            <th>STATUS</th>
 
-                                    </tr>
-                                    {{/each}}
+                                    </thead>
+                                    <tbody>
+                                        {{#each data}}
+                                        <tr>
+                                            <td>{{this.keyword_collection}}</td>
+                                            <td>{{this.status}}</td>
 
-                                    </tfoot>
-                            </table>
+                                        </tr>
+                                        {{/each}}
+
+                                        </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
 
 </section>

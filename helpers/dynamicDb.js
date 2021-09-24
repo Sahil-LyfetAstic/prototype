@@ -3,7 +3,7 @@ const collection = require("../config/collection");
 const DYN_DB = require("../config/dynConnection");
 
 module.exports = {
-  createDb: (dbName, userData,collection) => {
+  createDb: (dbName, userData, collection) => {
     return new Promise(async (resolve, reject) => {
       DYN_DB.connect(dbName, (err) => {
         if (err) console.log(err);
