@@ -7,16 +7,15 @@ const hbs = require("express-handlebars");
 const TLD_DB = require("./config/connection1");
 const DOM_DB = require("./config/connection2");
 const ADMIN_DB = require("./config/connection3");
-const USER_DB = require('./config/userDb')
-const SERVICE_DB = require('./config/serviceConnection')
-const KEYWORD_DB = require('./config/keywordDb')
+const USER_DB = require("./config/userDb");
+const SERVICE_DB = require("./config/serviceConnection");
+const KEYWORD_DB = require("./config/keywordDb");
 var session = require("express-session");
-const busboy = require('busboy')
-
+const busboy = require("busboy");
 
 var subadminRouter = require("./routes/adminUsers");
 var sysRouter = require("./routes/sys");
-var usersRouter = require('./routes/users')
+var usersRouter = require("./routes/users");
 
 var app = express();
 
@@ -49,15 +48,15 @@ DOM_DB.connect((err) => {
 ADMIN_DB.connect((err) => {
   err ? console.log(err) : console.log("ADMIN_DB connected successfully");
 });
-USER_DB.connect((err)=>{
-  err? console.log(err): console.log('USER_DB connected successfully' )
-})
-SERVICE_DB.connect((err)=>{
-  err? console.log(err) : console.log('SERVICE_DB connection succesfully')
- })
- KEYWORD_DB.connect((err)=>{
-   err? console.log(err) : console.log('KEYWORD_DB connected sucessfully')
- })
+USER_DB.connect((err) => {
+  err ? console.log(err) : console.log("USER_DB connected successfully");
+});
+SERVICE_DB.connect((err) => {
+  err ? console.log(err) : console.log("SERVICE_DB connection succesfully");
+});
+KEYWORD_DB.connect((err) => {
+  err ? console.log(err) : console.log("KEYWORD_DB connected sucessfully");
+});
 
 app.use(
   session({
@@ -69,10 +68,9 @@ app.use(
   })
 );
 
-
 app.use("/", usersRouter);
 app.use("/", sysRouter);
-app.use('/',subadminRouter)
+app.use("/", subadminRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

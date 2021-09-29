@@ -236,7 +236,7 @@
     </div>
     </div>
 </aside>
-<section class="content">
+<section class="content" onload="tes()"> 
     <div class="container-fluid">
         <div class="block-header">
             <div class="row">
@@ -270,7 +270,7 @@
                                     <div class="col-md-3">
                                        <div class="form-group">
                                         <h5>select service</h5>
-                                            <select class="form-select" id="service-drop">
+                                            <select class="form-select" id="ser-key" >
                                                 {{#each collName}}
                                                 <option value="{{this._id}}">{{this.keyword_collection}}</option>
                                                 {{/each}}
@@ -279,14 +279,12 @@
                                     </div>
                                 </div>
 
-                                <div class="row lists">
+                                <div class="row lists" id="tst"> 
                                     <div class="col-md-3">
                                         
-                                            <div class="list">
-                                                <p draggable="true" id="dr">list 1</p>
-                                                <p draggable="true" id="dr">list 1</p>
-                                                <p draggable="true" id="dr">list 1</p>
-                                                <p draggable="true" id="dr">list 1</p>
+                                            <div class="list" id="dis">
+                    
+                                            
                                             </div>
                                     </div>
                                     <div class="col-md-1">
@@ -308,11 +306,12 @@
                 </div>
             </div>
         </div>
-
-
+    
 </section>
 
+
 <script>
+
   var p = document.getElementsByTagName('p')
   var choice = document.getElementsByClassName('list')
   var dragItem = null;
@@ -324,10 +323,12 @@
   function dragStart(){
       console.log("drag start")
       dragItem = this;
+      console.log(this)
       setTimeout(()=> this.style.display = "none", 0)
   }
 
   function dragEnd(){
+      console.log("drag end")
       setTimeout(()=> this.style.display = "block",0)
         dragItem = null;
   }
@@ -351,4 +352,14 @@
   function Drop(){
       this.append(dragItem)
   }
+
+(function() {
+   
+   console.log('hllo')
+})();
+
+
+
+
+
 </script>

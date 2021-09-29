@@ -8,7 +8,7 @@ const fs = require("fs");
 const { handlebars } = require("hbs");
 const collection = require("../config/collection");
 const hostSug = require("../helpers/hostingSuggetion");
-const primeuserHelper = require('../helpers/dynamicDb')
+const primeuserHelper = require("../helpers/dynamicDb");
 const user = true;
 
 router.get("/", (req, res) => {
@@ -73,7 +73,7 @@ router.post("/primeuser-register", (req, res) => {
   };
   let collection = "PRIME_USER";
   userHelper.addDomDb(userData).then((userId) => {
-    console.log(userId)
+    console.log(userId);
     userHelper.doRegister(req.body, userId, collection).then((status) => {
       if (status) {
         console.log(req.body);
@@ -82,9 +82,9 @@ router.post("/primeuser-register", (req, res) => {
             req.body.ed + "@" + req.body.Domain + req.body.domainExtension,
           licenseKey: req.body.licenseKey,
         };
-        const dbName = req.body.Domain+'_'+req.body.domainExtension
-        const PRIME_USER_collection = "admin_collection"
-        primeuserHelper.createDb(dbName,req.body,PRIME_USER_collection)
+        const dbName = req.body.Domain + "_" + req.body.domainExtension;
+        const PRIME_USER_collection = "admin_collection";
+        primeuserHelper.createDb(dbName, req.body, PRIME_USER_collection);
         mailer.sendEmail(Data.mailID, Data.licenseKey).then((response) => {
           if (response == true) {
             res.render("user/primeuser-registration/home", {
@@ -180,5 +180,3 @@ router.get("/license-verify/", (req, res) => {
 });
 
 module.exports = router;
-
-

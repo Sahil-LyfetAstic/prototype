@@ -168,7 +168,7 @@ router.post("/add-category", (req, res) => {
       serviceHelper.updateStatus(
         req.body.category,
         req.body.service,
-        collection,
+        collection
       );
     } else {
       serviceHelper
@@ -231,6 +231,16 @@ router.post("/upload-keyword", upload.single("myfile"), (req, res) => {
         });
       }
     });
+});
+//get keyword based on drop-down
+router.post("/get-keywords", (req, res) => {
+  console.log(req.body);
+  keywordHelper.findColl(req.body.collId).then((collData) => {
+    keywordHelper.getCsv(collData.keyword_collection).then( (keywords) => {
+      console.log(keywords);
+      res.json(keywords)
+    });
+  });
 });
 
 router.get("/logout", (req, res) => {
