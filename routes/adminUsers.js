@@ -10,6 +10,7 @@ const fs = require("fs");
 const csv = require("csvtojson");
 const multer = require("multer");
 const upload = multer({ dest: "upload/" });
+var docxParser = require("docx-parser");
 const verifyLogin = (req, res, next) => {
   if (req.session.subadmin) {
     next();
@@ -199,46 +200,81 @@ router.post("/update-collection-status", (req, res) => {
 });
 
 router.post("/upload-keyword", upload.single("myfile"), (req, res) => {
-  // const csvFile = req.file.buffer.toString();
-  console.log(req.body.coll);
-  let csvArray = [];
-  csv({
-    output: "line",
-    trim: true,
-  })
-    .fromFile(req.file.path)
-    .then((csvData) => {
-      for (i in csvData) {
-        let data = {
-          keyword_name: csvData[i],
-        };
-        console.log(data);
-        csvArray.push(data);
-      }
+  console.log(req.body)
+  let keywordId = req.body.coll
+  let keywordArray = [];
+  if (req.file.mimetype === "text/csv") {
+    csv({
+      output: "line",
+      trim: true,
     })
-    .then((err) => {
-      if (err) throw err;
-      else {
-        keywordHelper.findColl(req.body.coll).then((key) => {
-          keywordHelper
-            .addCsv(key.keyword_collection, csvArray)
-            .then((status) => {
-              if (status === true) {
-                fs.unlinkSync(req.file.path);
-                console.log("keyword added success");
-              }
-            });
-        });
-      }
-    });
+      .fromFile(req.file.path)
+      .then((csvData) => {
+        // console.log(csvData.replace(/^"(.*)"$/, '$1'))
+        let splitedKeyword = csvData.toString().split(/\s+/).sort();
+        for (i in splitedKeyword) {
+          let data = {
+            keyword_name: splitedKeyword[i],
+          };
+          keywordArray.push(data);
+        }
+      })
+      .then((err) => {
+        if (err) throw err;
+        else {
+          keywordHelper.findColl(keywordId).then((key) => {
+            keywordHelper
+              .addCsv(key.keyword_collection, keywordArray)
+              .then((status) => {
+                if (status === true) {
+                  fs.unlinkSync(req.file.path);
+                  console.log("keyword added success");
+                }
+              });
+          });
+        }
+      });
+  } else if (req.file.mimetype === "application/wps-office.docx") {
+    console.log(req.file);
+    console.log(req.file.originalname);
+    docxParser
+      .parseDocx(req.file.path, function (data) {
+        let keywordData = data.split(/\s+/).sort();
+        for (i in keywordData) {
+          let data = {
+            keyword_name: keywordData[i],
+          };
+          // console.log(data)
+          keywordArray.push(data);
+        }
+      })
+      .then((err) => {
+        if (err) throw err;
+        else {
+          console.log(req.body.coll)
+          keywordHelper.findColl(keywordId).then((key) => {
+            console.log(key)
+
+            // keywordHelper
+            //   .addCsv(key.keyword_collection, keywordArray)
+            //   .then((status) => {
+            //     if (status === true) {
+            //       fs.unlinkSync(req.file.path);
+            //       console.log("keyword added success");
+            //     }
+            //   });
+          });
+        }
+      });
+  }
 });
 //get keyword based on drop-down
 router.post("/get-keywords", (req, res) => {
   console.log(req.body);
   keywordHelper.findColl(req.body.collId).then((collData) => {
-    keywordHelper.getCsv(collData.keyword_collection).then( (keywords) => {
+    keywordHelper.getCsv(collData.keyword_collection).then((keywords) => {
       console.log(keywords);
-      res.json(keywords)
+      res.json(keywords);
     });
   });
 });
@@ -248,4 +284,14 @@ router.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
+//testing 2 drag and drop
+router.get("/drag", (req, res) => {
+  keywordHelper.getAprovedColl().then((collName) => {
+    let coll = "Real_Estate";
+    keywordHelper.getCsv(coll).then((keywords) => {
+      console.log(keywords);
+      res.render("subAdmin/drag", { admin: true, keywords });
+    });
+  });
+});
 module.exports = router;

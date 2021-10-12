@@ -417,17 +417,218 @@ $("#ser-key").change((e) => {
       collId,
     },
     success: (data) => {
-        
-        data.forEach(element => {
-          let pElement = ' <p id="dr" draggable="true">'+element.keyword_name+'</p>'
-            document.getElementById('dis').innerHTML += pElement
-        });
+      data.forEach((element) => {
+        let test = "a" + element._id + 1;
+        console.log(test);
+
+        let pElement =
+          ' <div class="accordion" id="a' +
+          element._id +
+          '" class="example-draggable" draggable="true" ondragstart="onDragStart(event);"> <div class="accordion-item"> <h2 class="accordion-header" id="headingTwo"> <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#' +
+          test +
+          '"  aria-expanded="false" aria-controls="' +
+          test +
+          '"> ' +
+          element.keyword_name +
+          '</button></h2> <div id="' +
+          test +
+          '" class="accordion-collapse collapse"  aria-labelledby="headingTwo" data-bs-parent="#a' +
+          element._id +
+          '"> <div class="accordion-body" ondragover="onDragOver(event);" ondrop="onDrop(event);"></div></div></div></div> </br>';
+
+        document.getElementById("dis").innerHTML += pElement;
+      });
     },
   });
 });
 
+// $('#dr').on('drag',()=>{
+//   console.log('hello')
+// })
+
+// function drager(){
+
+//   var p = document.getElementsByTagName('p')
+//   var choice = document.getElementsByClassName('list2')
+
+//   // var dragItem = null;
+//   for(var i of p){
+//       i.addEventListener('dragstart',dragStart);
+//       i.addEventListener('dragend',dragEnd);
+//   }
+//   function dragStart(){
+//     console.log("drag start")
+//     dragItem = this;
+//     console.log(this)
+//     setTimeout(()=> this.style.display = "none", 0)
+// }
+
+// function dragEnd(){
+//     console.log("drag end")
+//     setTimeout(()=> this.style.display = "block",0)
+//       dragItem = null;
+// }
+// for(j of choice){
+//     j.addEventListener('dragover',dragOver);
+//     j.addEventListener('dragenter',dragEnter);
+//     j.addEventListener('dragleave',dragLeave);
+//     j.addEventListener('drop',Drop)
+// }
+
+// function dragOver(e){
+//     e.preventDefault();
+//     this.style.border = "2px dotted cyan"
+// }
+// function dragEnter(e){
+//     e.preventDefault()
+// }
+// function dragLeave(){
+
+// }
+// function Drop(){
+//     this.append(dragItem)
+// }
+
+// }
+
+// function clicke(cls){
+//   console.log(cls)
+// }
+
+// function onDragStart(event) {
+//   event.dataTransfer.setData("text/plain", event.target.id);
+
+//   event.currentTarget.style.backgroundColor = "yellow";
+// }
+
+// function onDragOver(event) {
+//   event.preventDefault();
+// }
+
+// function onDrop(event) {
+//   const id = event.dataTransfer.getData("text");
+//   const draggableElement = document.getElementById(id);
+//   const dropzone = event.target;
+
+//   dropzone.appendChild(draggableElement);
+//   event.dataTransfer.clearData();
+// }
+
+function onDragStart(event) {
+  
+  event.dataTransfer.setData("text/plain", event.target.id);
+}
+
+function onDragOver(event) {
+  event.preventDefault();
+  
+  
+}
+
+function onDrop(event) {
+
+  if (
+    event.target.className === "accordion-button collapsed" ||
+    event.target.className === "accordion-button"
+  ) {
+    event.preventDefault();
+    console.log("yess");
+  } else if (event.target.className === "fas fa-plus-circle add-a") {
+    
+    console.log(event.target.className);
+    const id = event.dataTransfer.getData("text");
+    console.log(id)
+    let second = document.getElementById(id+'b').value.replace(/\"/g, "")
+    console.log(second)
+
+    let parrentId = event.target.parentNode.id
+    console.log('pdfokdfj' +parrentId)
+    console.log('parrent id is '+parrentId)
+    let first = event.target.parentElement.value.replace(/\"/g, "")
+    console.log("without "+first + "second" + second)
+    console.log(parrentId)
+    let newKeyword =  first + " " + second 
+    console.log(newKeyword)
+
+    let html =
+   
+    '<div class="accordion-item" id="tesssst">'+
+      '<h2 class="accordion-header" id="headingTwo"> <button value ="'+newKeyword+'" id="'+parrentId+'"' +
+      'class="accordion-button collapsed" type="button"' +
+      'data-bs-toggle="collapse" data-bs-target="#'+parrentId+'t"' +
+      'aria-expanded="false" aria-controls="'+parrentId+'t">' +
+      '<i id="add-b" class="fas fa-plus-circle"' +
+      'style="padding: 10px;"></i>' +
+      ' '+newKeyword+'<i onclick="addAf(this)" id="bb"' +
+      'class="fas fa-plus-circle add-a" style="padding: 10px;"' +
+      ' ondragover="onDragOver(event);" ondrop="onDrop(event);"></i>' +
+      "</button></h2>" +
+      '<div id="'+parrentId+'t" class="accordion-collapse collapse"' +
+      'aria-labelledby="headingTwo" data-bs-parent="#'+parrentId+'">' +
+      '<div class="accordion-body" ondragover="onDragOver(event);"' +
+      'ondrop="onDrop(event);"></div>' +
+      '</div>'
+
+   
 
 
+
+
+    const draggableElement = document.getElementById(id);
+    const dropzone = event.target;
+    let test = parrentId.slice(0, -1); 
+    document.getElementById(test).innerHTML = html
+
+    dropzone.appendChild(draggableElement);
+    event.dataTransfer.clearData();    
+  } else {
+    console.log(event.target.className);
+    const id = event.dataTransfer.getData("text");
+    const draggableElement = document.getElementById(id);
+    const dropzone = event.target;
+
+    dropzone.appendChild(draggableElement);
+    event.dataTransfer.clearData();
+  }
+}
+
+//acordian function
+const elements = document.querySelectorAll(".element");
+
+elements.forEach((element) => {
+  let btn = element.querySelector(".question button .fa-angle-double-down");
+  // let icon = element.querySelector('.question button i');
+  let icon = element.querySelector(".question .fa-angle-double-down");
+  console.log(icon);
+
+  // let  icon = element.querySelector('.question .fa-plus-circle')
+
+  var answer = element.lastElementChild;
+  var answers = document.querySelectorAll(".element .answer");
+
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    answers.forEach((ans) => {
+      let ansIcon = ans.parentElement.querySelector("button i ");
+      console.log(ansIcon);
+      if (answer !== ans) {
+        ansIcon.className = "fas fa-angle-double-down";
+      }
+    });
+
+    answer.classList.toggle("hideText");
+    icon.className === "fas fa-angle-double-down"
+      ? (icon.className = "fas fa-minus-circle")
+      : (icon.className = "");
+  });
+});
+
+$("#add-b").click((e) => {
+  e.preventDefault();
+  toggle = false;
+
+  console.log("add before working");
+});
 
 
 
