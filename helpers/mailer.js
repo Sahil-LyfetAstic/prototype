@@ -61,4 +61,25 @@ module.exports = {
       });
     });
   },
+  resetPassword:(otpId,mailId)=>{
+    return new Promise(async(resolve,reject)=>{
+      const mailOption = {
+        from: "admin@resurs.com",
+        to: mailId,
+        subject: "otp",
+        text: otpId,
+      };
+      transport.sendMail(mailOption, async(err, info) => {
+        if (err) {
+          console.log(err);
+          await resolve(false);
+        } else {
+          console.log(info);
+          console.log("mail send succes", info.response);
+         await resolve(true);
+        }
+      });
+
+    })
+  }
 };

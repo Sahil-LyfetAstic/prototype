@@ -1,3 +1,4 @@
+
 $("#login-submit").on("click", () => {
   $("#admin-login").validate({
     rules: {
@@ -354,6 +355,7 @@ $("#add-keywords").on("click", (e) => {
   e.preventDefault();
   let keyword_collection = document.getElementById("keyword_collection").value;
   let status = "pending";
+  console.log(keyword_collection)
   console.log(keyword_collection);
   if (keyword_collection === "") {
     alert("enter keyword to continue");
@@ -401,9 +403,21 @@ $("#add-keyword-form").submit((e) => {
     data: new FormData(document.getElementById("add-keyword-form")),
     processData: false,
     contentType: false,
+    success:(response)=>{
+      if(response === true){
+        console.log(response)
+        $("#uploadmsg").html("added succes").css("color", "green").show();
+        $("#uploadmsg").delay(1000).hide(0);
+        $("#add-keyword-form").load(location.href + " #add-keyword-form");
+      }else{
+        $("#uploadmsg").html("file format not support").css("color", "red").show();
+        $("#uploadmsg").delay(1000).hide(0);
+        $("#add-keyword-form").load(location.href + " #add-keyword-form");
+      }
+    }
   });
 
-  return false;
+  // return false;
 });
 
 $("#ser-key").change((e) => {
@@ -514,121 +528,648 @@ $("#ser-key").change((e) => {
 //   event.dataTransfer.clearData();
 // }
 
+$("#add-keyword-form").submit((e) => {
+  e.preventDefault();
+  $.ajax({
+    url: "upload-keyword",
+    type: "post",
+    data: new FormData(document.getElementById("add-keyword-form")),
+    processData: false,
+    contentType: false,
+    success: (response) => {
+      if (response === true) {
+        console.log(response);
+        $("#uploadmsg").html("added succes").css("color", "green").show();
+        $("#uploadmsg").delay(1000).hide(0);
+        $("#add-keyword-form").load(location.href + " #add-keyword-form");
+      } else {
+        $("#uploadmsg")
+          .html("file format not support")
+          .css("color", "red")
+          .show();
+        $("#uploadmsg").delay(1000).hide(0);
+        $("#add-keyword-form").load(location.href + " #add-keyword-form");
+      }
+    },
+  });
+
+  // return false;
+});
+
+// function onDragStart(event) {
+//   event.dataTransfer.setData("text/plain", event.target.id);
+// }
+
+// function onDragOver(event) {
+//   event.preventDefault();
+// }
+
+// var count = 0;
+// let test = false;
+// function onDrop(event) {
+//   console.log(event.target.className);
+
+//   if (
+//     event.target.className === "accordion-button collapsed" ||
+//     event.target.className === "accordion-button"
+//   ) {
+//     event.preventDefault();
+//     console.log("yess");
+//   } else if (event.target.className === "fas fa-plus-circle add-a") {
+//     const id = event.dataTransfer.getData("text");
+//     let second = document.getElementById(id + "b").value.replace(/\"/g, "");
+//     let parrentId = event.target.parentNode.id;
+//     let inputId = parrentId.slice(0, -1);
+//     let first = event.target.parentElement.value.replace(/\"/g, "");
+//     let newKeyword = first + " " + second;
+//     console.log(newKeyword);
+
+//     let html =
+//       '<input style="display: none;" type="text" name="cat" id="' +
+//       inputId +
+//       'i" value="' +
+//       newKeyword +
+//       '" >' +
+//       '<div class="accordion-item" id="cat">' +
+//       '<h2 class="accordion-header" id="headingTwo"> <button value ="' +
+//       newKeyword +
+//       '" id="' +
+//       parrentId +
+//       '" name ="category"' +
+//       'class="accordion-button collapsed" type="button"' +
+//       'data-bs-toggle="collapse" data-bs-target="#' +
+//       parrentId +
+//       't"' +
+//       'aria-expanded="false" aria-controls="' +
+//       parrentId +
+//       't">' +
+//       '<i id="add-b" class="fas fa-plus-circle add-b"' +
+//       'style="padding: 10px;"></i>' +
+//       " " +
+//       newKeyword +
+//       '<i onclick="addAf(this)" id="bb"' +
+//       'class="fas fa-plus-circle add-a" style="padding: 10px;"' +
+//       ' ondragover="onDragOver(event);" ondrop="onDrop(event);"></i>' +
+//       '<i class="fas fa-minus-circle" style="padding: 10px;"  onclick="delKey(this)"></i>' +
+//       "<br>" +
+//       '<i class="fas fa-pen" style="padding: 10px;"' +
+//       '  onclick="editKey(this)"></i>';
+//     ("</button></h2>");
+
+//     const draggableElement = document.getElementById(id);
+//     const dropzone = event.target;
+//     let test = parrentId.slice(0, -1);
+//     document.getElementById(test).innerHTML = html;
+
+//     dropzone.appendChild(draggableElement);
+//     event.dataTransfer.clearData();
+//   } else if (event.target.className === "fas fa-plus-circle add-b") {
+//     const id = event.dataTransfer.getData("text");
+//     let second = document.getElementById(id + "b").value.replace(/\"/g, "");
+//     let parrentId = event.target.parentNode.id;
+//     let inputId = parrentId.slice(0, -1);
+//     let first = event.target.parentElement.value.replace(/\"/g, "");
+//     let newKeyword = second + " " + first;
+//     console.log("parrentid  ",parrentId, " ", document.getElementById(parrentId                                                                                                                                                                                                                                 ))
+//     console.log("inputid  ",inputId, " ", document.getElementById(inputId))
+    
+
+//     let html =
+//       '<input style="display: none;" type="text" name="cat" id="' +
+//       inputId +
+//       'i" value="' +
+//       newKeyword +
+//       '" >' +
+//       '<div class="accordion-item" id="keyword">' +
+//       '<h2 class="accordion-header" id="headingTwo"> <button value ="' +
+//       newKeyword +
+//       '" id="' +
+//       parrentId +
+//       '" name ="category"' +
+//       'class="accordion-button collapsed" type="button"' +
+//       'data-bs-toggle="collapse" data-bs-target="#' +
+//       parrentId +
+//       't"' +
+//       'aria-expanded="false" aria-controls="' +
+//       parrentId +
+//       't">' +
+//       '<i id="add-b" class="fas fa-plus-circle add-b"' +
+//       'style="padding: 10px;"></i>' +
+//       " " +
+//       newKeyword +
+//       '<i onclick="addAf(this)" id="bb"' +
+//       'class="fas fa-plus-circle add-a" style="padding: 10px;"' +
+//       ' ondragover="onDragOver(event);" ondrop="onDrop(event);"></i>' +
+//       '<i class="fas fa-minus-circle" style="padding: 10px;"  onclick="delKey(this)"></i>' +
+//       "<br>" +
+//       '<i class="fas fa-pen" style="padding: 10px;"' +
+//       '  onclick="editKey(this)"></i>';
+//     ("</button></h2>");
+
+//     const draggableElement = document.getElementById(id);
+//     const dropzone = event.target;
+//     let test = parrentId.slice(0, -1);
+//     document.getElementById(test).innerHTML = html;
+
+//     dropzone.appendChild(draggableElement);
+//     event.dataTransfer.clearData();
+//   } else if(event.target.className === 'list list2'){
+//     const id = event.dataTransfer.getData("text");
+//     const draggableElement = document.getElementById(id);
+//     const dropzone = event.target;
+//     dropzone.appendChild(draggableElement);
+//     event.dataTransfer.clearData();
+//     console.log(test);
+//   }else {
+//     event.preventDefault()
+//   }
+// }
+
+// function editKey(data) {
+//   console.log(data.parentElement.value);
+//   $(".modal").modal("show");
+
+//   document.getElementById("modal-input").value = data.parentElement.value;
+//   document
+//     .getElementById("modal-input")
+//     .setAttribute("name", data.parentElement.id);
+// }
+
+// $("#modal-save").click((e) => {
+//   let data = document.getElementById("modal-input").value;
+//   console.log(data);
+//   let id = document.getElementById("modal-input").name;
+//   console.log(id);
+//   let inputId = id.slice(0, -1);
+
+//   // let id2 = id.slice(0, -1)
+//   // // $('#'+id).attr('value', 'Save');
+//   // let t = document.getElementById(id)
+//   // console.log(t)
+//   html =
+//     '<i id="add-b" class="fas fa-plus-circle add-b"' +
+//     'style="padding: 10px;"></i>' +
+//     " " +
+//     data +
+//     '<i onclick="addAf(this)" id="bb"' +
+//     'class="fas fa-plus-circle add-a" style="padding: 10px;"' +
+//     ' ondragover="onDragOver(event);" ondrop="onDrop(event);"></i>' +
+//     '<i class="fas fa-minus-circle" style="padding: 10px;"  onclick="delKey(this)"></i>' +
+//     "<br>" +
+//     '<i class="fas fa-pen" style="padding: 10px;"' +
+//     '  onclick="editKey(this)"></i>';
+
+//   document.getElementById(id).innerHTML = html;
+//   document.getElementById(id).value = data;
+//   document.getElementById(inputId + "i").value = data;
+//   $(".modal").modal("hide");
+// });
+
+// $("#modal-close").click(() => $(".modal").modal("hide"));
+
+// function delKey(data) {
+//   console.log(data)
+//   console.log('button clicked')
+//   let id = data.parentElement.id.slice(0, -1);
+//   console.log(id);
+//   var el = document.getElementById(id);
+//   el.parentNode.removeChild(el);
+// }
+
+
 function onDragStart(event) {
-  
   event.dataTransfer.setData("text/plain", event.target.id);
+  event.dataTransfer.effectAllowed = "copy";
 }
 
 function onDragOver(event) {
   event.preventDefault();
-  
-  
 }
 
+let count = 1;
+
 function onDrop(event) {
-
-  if (
-    event.target.className === "accordion-button collapsed" ||
-    event.target.className === "accordion-button"
-  ) {
-    event.preventDefault();
-    console.log("yess");
-  } else if (event.target.className === "fas fa-plus-circle add-a") {
-    
-    console.log(event.target.className);
+  const dropzone = event.target;
+  console.log(dropzone)
+  event.target.style.backgroundColor = "#ededed";
+  if (dropzone.className === "list list2") {
     const id = event.dataTransfer.getData("text");
-    console.log(id)
-    let second = document.getElementById(id+'b').value.replace(/\"/g, "")
-    console.log(second)
+    const draggableElement = document.getElementById(id);
+    if (draggableElement.className === "example-draggable edited") {
+      dropzone.appendChild(draggableElement);
 
-    let parrentId = event.target.parentNode.id
-    console.log('pdfokdfj' +parrentId)
-    console.log('parrent id is '+parrentId)
-    let first = event.target.parentElement.value.replace(/\"/g, "")
-    console.log("without "+first + "second" + second)
-    console.log(parrentId)
-    let newKeyword =  first + " " + second 
-    console.log(newKeyword)
+      ///changing style of edit and delete tag
+
+      document.getElementById("e" + draggableElement.id).style.display =
+        "inline";
+      document.getElementById("d" + draggableElement.id).style.display =
+        "inline";
+      event.dataTransfer.clearData();
+
+      ///remove from db
+      let editedKeyword = document
+        .getElementById(draggableElement.id)
+        .getAttribute("data-value");
+      flushEdited(editedKeyword);
+    } else {
+      //cloning
+      const id = event.dataTransfer.getData("text");
+      const draggableElement = document.getElementById(id).cloneNode(true);
+
+      //sorting
+      let editedKeyword = document
+        .getElementById(draggableElement.id)
+        .getAttribute("data-value");
+      let isKey = sorting(editedKeyword);
+      if (isKey === true) {
+        //changing background color
+        draggableElement.style.backgroundColor = "#fda38b";
+        draggableElement.childNodes[1].name = "duplicate"; //change name for sorting
+
+        document.getElementById(draggableElement.id).id =
+          draggableElement.id + count;
+        document.getElementById("e" + draggableElement.id).id =
+          "e" + draggableElement.id + count;
+        document.getElementById("d" + draggableElement.id).id =
+          "d" + draggableElement.id + count;
+        dropzone.appendChild(draggableElement);
+
+        ///changing style of edit and delete tag
+
+        document.getElementById("e" + draggableElement.id).style.display =
+          "inline";
+        document.getElementById("d" + draggableElement.id).style.display =
+          "inline";
+        event.dataTransfer.clearData();
+        count += 1;
+      } else {
+        //to change id of element
+        document.getElementById(draggableElement.id).id =
+          draggableElement.id + count;
+        document.getElementById("e" + draggableElement.id).id =
+          "e" + draggableElement.id + count;
+        document.getElementById("d" + draggableElement.id).id =
+          "d" + draggableElement.id + count;
+        dropzone.appendChild(draggableElement);
+
+        ///changing style of edit and delete tag
+
+        document.getElementById("e" + draggableElement.id).style.display =
+          "inline";
+        document.getElementById("d" + draggableElement.id).style.display =
+          "inline";
+        event.dataTransfer.clearData();
+        count += 1;
+      }
+    }
+  } else if (dropzone.className === "fas fa-download add-a") {
+    const id = event.dataTransfer.getData("text");
+    const parrentId = dropzone.parentElement.parentElement.id;
+    const firstValue = dropzone.parentElement.value;
+    let secondId = id.split("-")[0].replace(/-/g, "");
+    const secondValue = document.getElementById(secondId + "i").value;
+    const keyword = firstValue + " " + secondValue.trim();
+
+    //keyword exist
+
+    let isKey = sorting(keyword);
+    if (isKey === true) {
+      let html =
+        '<input type="text" value="' +
+        keyword +
+        '" name="dupicate" id="' +
+        parrentId +
+        'i" style="display: none;">' +
+        '<button value="' +
+        keyword +
+        '" style="all: unset;" id="' +
+        parrentId +
+        'b">' +
+        '<i id="add-b" class="fas fa-download add-b" onclick="pre(event)" style="padding: 13px 30px 13px 30px; font-size:17px;"></i>' +
+        "" +
+        keyword +
+        '<i id="' +
+        parrentId +
+        '-a" ' +
+        'class="fas fa-download add-a" onclick="pre(event)" style="padding: 13px 30px 13px 30px; font-size:17px;"' +
+        'ondragover="onDragOver(event);" ondrop="onDrop(event);"></i>' +
+        '<i class="fas fa-pen-square" style="padding: 13px 30px 13px 152px; cursor: pointer;font-size:17px;" onclick="editKeyword(event,this)"></i>' +
+        '  <i class="fas fa-trash" style="padding: 10px;cursor: pointer;"' +
+        'onclick="delKey(event,this)" id="' +
+        parrentId +
+        'd"></i>' +
+        "</button>";
+      document.getElementById(parrentId).style.backgroundColor = "#f79a71";
+      document.getElementById(parrentId).innerHTML = html;
+    } else {
+      let html =
+        '<input type="text" value="' +
+        keyword +
+        '" name="cat" id="' +
+        parrentId +
+        'i" style="display: none;">' +
+        '<button value="' +
+        keyword +
+        '" style="all: unset;" id="' +
+        parrentId +
+        'b">' +
+        '<i id="add-b" class="fas fa-download add-b" onclick="pre(event)" style="padding: 13px 30px 13px 30px; font-size:17px;"></i>' +
+        "" +
+        keyword +
+        '<i id="' +
+        parrentId +
+        '-a" ' +
+        'class="fas fa-download add-a" onclick="pre(event)" style="padding: 13px 30px 13px 30px; font-size:17px;"' +
+        'ondragover="onDragOver(event);" ondrop="onDrop(event);"></i>' +
+        '<i class="fas fa-pen-square" style="padding: 13px 30px 13px 152px; font-size:17px;cursor: pointer;" onclick="editKeyword(event,this)"></i>' +
+        '  <i class="fas fa-trash" style="padding: 10px;cursor: pointer;"' +
+        'onclick="delKey(event,this)" id="' +
+        parrentId +
+        'd"></i>' +
+        "</button>";
+
+      document.getElementById(parrentId).style.backgroundColor =
+        "rgb(223 227 226 / 77%)";
+      document.getElementById(parrentId).innerHTML = html;
+    }
+  } else if (dropzone.className === "fas fa-download add-b") {
+    const id = event.dataTransfer.getData("text");
+    const parrentId = dropzone.parentElement.parentElement.id;
+    const firstValue = dropzone.parentElement.value;
+    let secondId = id.split("-")[0].replace(/-/g, "");
+    const secondValue = document.getElementById(secondId + "i").value;
+    const keyword = secondValue + " " + firstValue.trim();
+   
 
     let html =
-   
-    '<div class="accordion-item" id="tesssst">'+
-      '<h2 class="accordion-header" id="headingTwo"> <button value ="'+newKeyword+'" id="'+parrentId+'"' +
-      'class="accordion-button collapsed" type="button"' +
-      'data-bs-toggle="collapse" data-bs-target="#'+parrentId+'t"' +
-      'aria-expanded="false" aria-controls="'+parrentId+'t">' +
-      '<i id="add-b" class="fas fa-plus-circle"' +
-      'style="padding: 10px;"></i>' +
-      ' '+newKeyword+'<i onclick="addAf(this)" id="bb"' +
-      'class="fas fa-plus-circle add-a" style="padding: 10px;"' +
-      ' ondragover="onDragOver(event);" ondrop="onDrop(event);"></i>' +
-      "</button></h2>" +
-      '<div id="'+parrentId+'t" class="accordion-collapse collapse"' +
-      'aria-labelledby="headingTwo" data-bs-parent="#'+parrentId+'">' +
-      '<div class="accordion-body" ondragover="onDragOver(event);"' +
-      'ondrop="onDrop(event);"></div>' +
-      '</div>'
+    '<input type="text" name="duplicate" value="' +
+    keyword +
+    '" id="' +
+    parrentId +
+    'i" style="display: none;">' +
+    '<button value="' +
+    keyword +
+    '" style="all: unset;" id="' +
+    parrentId +
+    'b">' +
+    '<i id="add-b" class="fas fa-download add-b" onclick="pre(event)" style="padding: 13px 30px 13px 30px; font-size:17px;"></i>' +
+    "" +
+    keyword +
+    '<i id="' +
+    parrentId +
+    '-a" ' +
+    'class="fas fa-download add-a" onclick="pre(event)" style="padding: 13px 30px 13px 30px; font-size:17px;"' +
+    'ondragover="onDragOver(event);" ondrop="onDrop(event);"></i>' +
+    '<i class="fas fa-pen-square" style="padding: 13px 30px 13px 152px; font-size:17px;cursor: pointer;" onclick="editKeyword(event,this)"></i>' +
+    '<i class="fas fa-trash" style="padding: 10px;cursor: pointer;"' +
+    'onclick="delKey(event,this)" id="' +
+    parrentId +
+    'd"></i>' +
+    "</button>";
 
-   
 
+    let isKey = sorting(keyword);
+    if (isKey === true) {
+      document.getElementById(parrentId).style.backgroundColor = "#f79a71";
+      document.getElementById(parrentId).innerHTML = html;
+    } else {
 
-
-
-    const draggableElement = document.getElementById(id);
-    const dropzone = event.target;
-    let test = parrentId.slice(0, -1); 
-    document.getElementById(test).innerHTML = html
-
-    dropzone.appendChild(draggableElement);
-    event.dataTransfer.clearData();    
-  } else {
-    console.log(event.target.className);
-    const id = event.dataTransfer.getData("text");
-    const draggableElement = document.getElementById(id);
-    const dropzone = event.target;
-
-    dropzone.appendChild(draggableElement);
-    event.dataTransfer.clearData();
+      document.getElementById(parrentId).style.backgroundColor =
+        "rgb(223 227 226 / 77%)";
+      document.getElementById(parrentId).innerHTML = html;
+    }
+  }
+  else{
+    event.preventDefault()
   }
 }
 
-//acordian function
-const elements = document.querySelectorAll(".element");
-
-elements.forEach((element) => {
-  let btn = element.querySelector(".question button .fa-angle-double-down");
-  // let icon = element.querySelector('.question button i');
-  let icon = element.querySelector(".question .fa-angle-double-down");
-  console.log(icon);
-
-  // let  icon = element.querySelector('.question .fa-plus-circle')
-
-  var answer = element.lastElementChild;
-  var answers = document.querySelectorAll(".element .answer");
-
-  btn.addEventListener("click", (e) => {
-    e.preventDefault();
-    answers.forEach((ans) => {
-      let ansIcon = ans.parentElement.querySelector("button i ");
-      console.log(ansIcon);
-      if (answer !== ans) {
-        ansIcon.className = "fas fa-angle-double-down";
-      }
-    });
-
-    answer.classList.toggle("hideText");
-    icon.className === "fas fa-angle-double-down"
-      ? (icon.className = "fas fa-minus-circle")
-      : (icon.className = "");
-  });
-});
-
-$("#add-b").click((e) => {
+function editKeyword(e, data) {
   e.preventDefault();
-  toggle = false;
+  let parrentId = data.parentElement.parentElement.id;
 
-  console.log("add before working");
+  $(".modal").modal("show");
+  document.getElementById("modal-input").value = data.parentElement.value;
+  document.getElementById("modal-input").name = parrentId;
+}
+
+$("#modal-save").click((e) => {
+  let editedData = document.getElementById("modal-input").value.trim();
+  let parrentId = document.getElementById("modal-input").name;
+
+  let isKey = sorting(editedData);
+  if (isKey === true) {
+    let html =
+      '<input type="text" name="duplicate" value="' +
+      editedData +
+      '" id="' +
+      parrentId +
+      'i" style="display: none;">' +
+      '<button value="' +
+      editedData +
+      '" style="all: unset;" id="' +
+      parrentId +
+      'b">' +
+      '<i id="add-b" class="fas fa-download add-b" onclick="pre(event)" style="padding: 13px 30px 13px 30px; font-size:17px;"></i>' +
+      "" +
+      editedData +
+      '<i id="' +
+      parrentId +
+      '-a" ' +
+      'class="fas fa-download add-a" onclick="pre(event)" style="padding: 13px 30px 13px 30px; font-size:17px;"' +
+      'ondragover="onDragOver(event);" ondrop="onDrop(event);"></i>' +
+      ' <i class="fas fa-pen-square" style="padding: 13px 30px 13px 152px; font-size:17px;cursor: pointer;" onclick="editKeyword(event,this)"></i>' +
+      '<i class="fas fa-trash" style="padding: 10px;cursor:pointer"' +
+      'onclick="delKey(event,this)" id="' +
+      parrentId +
+      'd"></i>' +
+      "</button>";
+
+    document.getElementById(parrentId).style.backgroundColor = "#f79a71";
+    document.getElementById(parrentId).innerHTML = html;
+    $(".modal").modal("hide");
+  } else {
+    let html =
+      '<input type="text" name="cat" value="' +
+      editedData +
+      '" id="' +
+      parrentId +
+      'i" style="display: none;">' +
+      '<button value="' +
+      editedData +
+      '" style="all: unset;" id="' +
+      parrentId +
+      'b">' +
+      '<i id="add-b" class="fas fa-download add-b" onclick="pre(event)" style="padding: 13px 30px 13px 30px; font-size:17px;"></i>' +
+      "" +
+      editedData +
+      '<i id="' +
+      parrentId +
+      '-a" ' +
+      'class="fas fa-download add-a" onclick="pre(event)" style="padding: 13px 30px 13px 30px; font-size:17px;"' +
+      'ondragover="onDragOver(event);" ondrop="onDrop(event);"></i>' +
+      ' <i class="fas fa-pen-square" style="padding: 13px 30px 13px 152px; font-size:17px;cursor: pointer;" onclick="editKeyword(event,this)"></i>' +
+      '<i class="fas fa-trash" style="padding: 10px;cursor:pointer"' +
+      'onclick="delKey(event,this)" id="' +
+      parrentId +
+      'd"></i>' +
+      "</button>";
+
+    document.getElementById(parrentId).style.backgroundColor =
+      "rgb(223 227 226 / 77%)";
+    document.getElementById(parrentId).innerHTML = html;
+    $(".modal").modal("hide");
+  }
 });
 
+$("#modal-close").click(() => $(".modal").modal("hide"));
+
+function delKey(event, data) {
+  event.preventDefault();
+  let id = data.parentElement.parentElement.id;
+  var el = document.getElementById(id);
+  el.parentNode.removeChild(el);
+}
+
+$("#relation-form").submit((e) => {
+  e.preventDefault();
+
+  let data = $("#relation-form").serializeArray();
+
+  if (data.length === 0) {
+    alert("no data to submit");
+  } else {
+    $.ajax({
+      url: "submit-keyword",
+      type: "post",
+      data: data,
+      success: (response) => {
+        if (response === true) {
+          $("#afteruploadmsg")
+            .html("added succes")
+            .css("color", "green")
+            .show();
+          // $("#afteruploadmsg").delay(1000).hide(0);
+          alert('successfully submitted')
+          $("#list2").empty();
+          $("#edited").load(location.href + " #edited");
+          $("#key-count").load(location.href + " #key-count");
+        }
+      },
+    });
+  }
+  return false;
+});
+
+function flushEdited(keyword) {
+  $.ajax({
+    url: "flush-keyword",
+    type: "post",
+    data: {
+      keyword,
+    },
+  });
+}
+
+function sorting(keyword) {
+  let key;
+  $.ajax({
+    url: "key-exist",
+    type: "post",
+    async: false,
+    data: {
+      keyword,
+    },
+    success: (response) => {
+      key = response;
+    },
+  });
+
+  return key;
+}
 
 
+function pre(event){
+  event.preventDefault()
+}
+
+
+
+///////reset password
+$('#reset-password').click((e)=>{
+  const email = document.getElementById('email').value
+  e.preventDefault()
+  if(!email){
+    alert("enter email to continue")
+  }else{
+    $.ajax({
+      url:'/reset-password',
+      type:'post',
+      data:{
+        email
+      },
+      success:(response)=>{
+        if(response === 'no-user'){
+          alert('no user found')
+        }else if(response === "wrong"){
+          alert("something went wrong")
+        }else if(response === "submited"){
+          alert("password will send shortly")
+        }
+      }
+    })
+  }
+})
+
+
+
+// let timerOn = true;
+
+// function timer(remaining) {
+//   var m = Math.floor(remaining / 60);
+//   var s = remaining % 60;
+  
+//   m = m < 10 ? '0' + m : m;
+//   s = s < 10 ? '0' + s : s;
+//   document.getElementById('timer').innerHTML = m + ':' + s;
+//   remaining -= 1;
+  
+//   if(remaining >= 0 && timerOn) {
+//     setTimeout(function() {
+//         timer(remaining);
+//     }, 1000);
+//     return;
+//   }
+
+//   if(!timerOn) {
+//     // Do validate stuff here
+//     return;
+//   }
+  
+//   // Do timeout stuff here
+//   alert('Timeout for otp');
+// }
+
+// timer(120);
+
+
+function resetPasswordAprovel(event){
+  event.preventDefault()
+  let status = event.target.value;
+  let id = event.target.id;
+  $.ajax({
+    url:"/update-reset-password",
+    type:'post',
+    data:{
+      status,
+      id
+    },
+    success:(response)=>{
+      if(!response){
+        alert("something wrong")
+      }else{
+        $("#reset-password-approvel").load(location.href + " #reset-password-approvel");
+      }
+    }
+  })
+}

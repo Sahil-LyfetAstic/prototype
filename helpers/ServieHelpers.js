@@ -39,7 +39,7 @@ module.exports = {
     });
   },
   updateService: (serviceData) => {
-    console.log(serviceData);
+    console.log(serviceData.id);
     return new Promise(async (resolve, reject) => {
       await db
         .get()
@@ -51,10 +51,11 @@ module.exports = {
               status: serviceData.status,
               adminUpdatedDate: serviceData.adminUpdatedDate,
               adminUpdateTime: serviceData.adminUpdateTime,
-            },
+            }
           },
         )
         .then((status) => {
+          console.log(status)
           status ? resolve(true) : console.log("service add error");
         });
     });

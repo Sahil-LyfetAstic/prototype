@@ -92,11 +92,39 @@ module.exports = {
         });
     });
   },
-  getCsv:(coll)=>{
-    return new Promise(async(resolve,reject)=>{
-      await db.get().collection(coll).find().toArray().then((data)=>{
-       resolve(data)
-      })
-    })
-  }
+  getCsv: (coll) => {
+    return new Promise(async (resolve, reject) => {
+      await db
+        .get()
+        .collection(coll)
+        .find()
+        .toArray()
+        .then((data) => {
+          resolve(data);
+        });
+    });
+  },
+  submitSingleKey: (keyword) => {
+    return new Promise(async (resolve, reject) => {
+      await db
+        .get()
+        .collection(collection.KEYWORD_COLLECTION)
+        .insertOne(keyword)
+        .then((res) => {
+          res ? resolve(true) : reject(false);
+        });
+    });
+  },
+  submitKeywords: (keyData) => {
+    return new Promise(async (resolve, reject) => {
+      console.log(keyData);
+      await db
+        .get()
+        .collection(collection.KEYWORD_COLLECTION)
+        .insertMany(keyData)
+        .then((response) => {
+          response ? resolve(true) : reject(false);
+        });
+    });
+  },
 };

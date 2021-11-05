@@ -7,6 +7,6 @@ module.exports = {
     ADMIN_USER_COLLECTION:'users_under_admin',
     SERVICE_COLLECTION:'service_collection',
     CATEGORY_COLLECTION:'category_collection',
-    APPROVEL_COLLECTION:'admin_apr' ///collection status tables
-    
+    APPROVEL_COLLECTION:'admin_apr' ,///collection status tables
+    RESET_PASSID_COLL:'password_reset_status'
 }

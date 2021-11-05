@@ -11,6 +11,8 @@ const csv = require("csvtojson");
 const multer = require("multer");
 const upload = multer({ dest: "upload/" });
 var docxParser = require("docx-parser");
+const passGenerator = require("otp-generator");
+const mailer = require("../helpers/mailer");
 const verifyLogin = (req, res, next) => {
   if (req.session.subadmin) {
     next();
@@ -154,6 +156,7 @@ router.post("/add-service", (req, res) => {
 router.post("/update-service", (req, res) => {
   req.body.adminUpdatedDate = date.format(now, "ddd, MMM DD YYYY");
   req.body.adminUpdateTime = date.format(now, "hh:mm A [GMT]Z");
+  console.log("adnubbhbf", req.body);
   serviceHelper.updateService(req.body).then((status) => {
     status ? res.send(true) : res.send(false);
     //create a database named service
@@ -200,8 +203,9 @@ router.post("/update-collection-status", (req, res) => {
 });
 
 router.post("/upload-keyword", upload.single("myfile"), (req, res) => {
-  console.log(req.body)
-  let keywordId = req.body.coll
+  console.log(req.body);
+  console.log(req.file);
+  let keywordId = req.body.coll;
   let keywordArray = [];
   if (req.file.mimetype === "text/csv") {
     csv({
@@ -228,7 +232,7 @@ router.post("/upload-keyword", upload.single("myfile"), (req, res) => {
               .then((status) => {
                 if (status === true) {
                   fs.unlinkSync(req.file.path);
-                  console.log("keyword added success");
+                  res.send(true);
                 }
               });
           });
@@ -237,35 +241,55 @@ router.post("/upload-keyword", upload.single("myfile"), (req, res) => {
   } else if (req.file.mimetype === "application/wps-office.docx") {
     console.log(req.file);
     console.log(req.file.originalname);
-    docxParser
-      .parseDocx(req.file.path, function (data) {
-        let keywordData = data.split(/\s+/).sort();
-        for (i in keywordData) {
-          let data = {
-            keyword_name: keywordData[i],
-          };
-          // console.log(data)
-          keywordArray.push(data);
-        }
-      })
-      .then((err) => {
-        if (err) throw err;
-        else {
-          console.log(req.body.coll)
-          keywordHelper.findColl(keywordId).then((key) => {
-            console.log(key)
 
-            // keywordHelper
-            //   .addCsv(key.keyword_collection, keywordArray)
-            //   .then((status) => {
-            //     if (status === true) {
-            //       fs.unlinkSync(req.file.path);
-            //       console.log("keyword added success");
-            //     }
-            //   });
+    docxParser.parseDocx(req.file.path, async function (data) {
+      let keywordData = data.split(/\s+/).sort();
+      for (i in keywordData) {
+        let data = {
+          keyword_name: keywordData[i],
+        };
+        keywordArray.push(data);
+      }
+      keywordHelper.findColl(keywordId).then((key) => {
+        keywordHelper
+          .addCsv(key.keyword_collection, keywordArray)
+          .then((status) => {
+            if (status === true) {
+              fs.unlinkSync(req.file.path);
+              res.send(true);
+            }
           });
-        }
       });
+    });
+  } else if (req.file.mimetype === "text/plain") {
+    console.log("hellooo");
+    fs.readFile(req.file.path, function (err, data) {
+      if (err) throw err;
+      // data will contain your file contents
+      let textData = data.toString().split("\n").sort();
+      for (i in textData) {
+        let data = {
+          keyword_name: textData[i],
+        };
+        keywordArray.push(data);
+      }
+
+      keywordHelper.findColl(keywordId).then((key) => {
+        keywordHelper
+          .addCsv(key.keyword_collection, keywordArray)
+          .then((status) => {
+            if (status === true) {
+              fs.unlinkSync(req.file.path);
+              res.send(true);
+            }
+          });
+      });
+    });
+  } else {
+    fs.unlink(req.file.path, function (err) {
+      if (err) throw err;
+      res.send(false);
+    });
   }
 });
 //get keyword based on drop-down
@@ -290,8 +314,79 @@ router.get("/drag", (req, res) => {
     let coll = "Real_Estate";
     keywordHelper.getCsv(coll).then((keywords) => {
       console.log(keywords);
-      res.render("subAdmin/drag", { admin: true, keywords });
+      res.render("subAdmin/drag-and-drop", { admin: true, keywords });
     });
   });
 });
+
+router.get("/cat", (req, res) => {
+  keywordHelper.getAprovedColl().then((service) => {
+    let coll = "Real_Estate";
+    console.log(service);
+    keywordHelper.getCsv(coll).then((keywords) => {
+      res.render("subAdmin/cat-test", { admin: true, service, keywords });
+    });
+  });
+});
+
+router.post("/submit-keyword", (req, res) => {
+  console.log(req.body);
+  let keywords = [];
+  let data = req.body.cat;
+  console.log(typeof data);
+  if (typeof data === "string") {
+    let data = {
+      keyword: req.body.cat,
+    };
+    keywordHelper.submitSingleKey(data).then((response) => {
+      response ? res.send(true) : res.send(false);
+    });
+  } else {
+    data.forEach((element) => {
+      let keywordData = {
+        keyword: element,
+      };
+      keywords.push(keywordData);
+    });
+    keywordHelper.submitKeywords(keywords).then((response) => {
+      response ? res.send(true) : res.send(false);
+    });
+  }
+});
+
+router.post("/test", (req, res) => {
+  console.log(req.body);
+});
+
+router.get("/reset-password", (req, res) => {
+  res.render("user/reset-pass", { user: true });
+});
+
+router.post("/reset-password", (req, res) => {
+  adminHelper.ifUser(req.body.email).then((user) => {
+    if (!user) {
+      res.send("no-user");
+    } else {
+      const passId = passGenerator.generate(4, {
+        upperCase: false,
+        specialChars: false,
+      });
+      adminHelper.updatePass(passId, user._id).then((resp) => {
+        if (!resp) res.send("wrong");
+        else {
+          adminHelper.getUser(user._id).then((user) => {
+            if (!user) res.send("wrong");
+            else {
+              adminHelper.updateUserStatus(user._id, false).then((user) => {
+                if (!user) res.send("wrong");
+                else res.send("submited");
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+});
+
 module.exports = router;

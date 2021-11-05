@@ -16,7 +16,7 @@
             <li class="active">
                 <a href="#" onClick="return false;" class="menu-toggle">
                     <i class="fas fa-tachometer-alt"></i>
-                    <a href="sysadmin">Home</a>
+                    <a href="subadmin">Home</a>
                 </a>
             </li>
             <li>
@@ -226,22 +226,17 @@
                                 <span class="lever switch-col-red"></span>
                             </label>
                         </div>
-                    </li>
-                    <li>
-                        <span>Location Permission</span>
-                        <div class="switch">
-                            <label>
-                                <input type="checkbox">
-                                <span class="lever switch-col-lime"></span>
-                            </label>
-                        </div>
-                    </li>
-                </ul>
+                    </li>login
+                    <span>Location Permission</span>logincol-lime"></span>
+                    </label>
             </div>
+            </li>
+            </ul>
         </div>
     </div>
+    </div>
 </aside>
-<section class="content">
+<section class="content" onload="tes()">
     <div class="container-fluid">
         <div class="block-header">
             <div class="row">
@@ -259,216 +254,165 @@
                 </div>
             </div>
         </div>
-        <br>
-        <br>
-        <div class="row clearfix" id="add-us">
-            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+        <div class="row" onload="setStyle(event)">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
-                    <div class="header">
-                        <h2>
-                            <strong>Add</strong> users
-                        </h2>
-                        <h4 id="msg"></h4>
-                    </div>
-                    <div class="body" id="subadmin-tdl-status">
+                    <div class="body">
+
                         <div class="table-responsive">
-                            <form id="add-adminuser" method="POST" , action="add-adminuser">
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="inputusername">username</label>
-                                        <input type="text" class="form-control" id="inputusername" name="username"
-                                            placeholder="username">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="inputEmail4">Email</label>
-                                        <input type="email" class="form-control" id="inputEmail4" placeholder="Email"
-                                            name="email">
-                                    </div>
+                            <div class="">
+                                <h5 id="uploadmsg" style="display: none;"></h5>
+                            </div>
+                            <br>
+                            <form id="add-keyword-form">
+                                <div class="form-group">
+                                    <h5>Upload Keyword</h5>
+                                    <br>
+                                    <select class="form-select col-md-3" id="collection-drop" name="coll">
+                                        {{#each service}}
+                                        <option value="{{this._id}}">{{this.keyword_collection}}</option>
+                                        {{/each}}
+                                    </select>
+
                                 </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="mobile">Mobile</label>
-                                        <input type="tel" class="form-control" id="mobile" placeholder="Mobile"
-                                            name="mobile">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="inputPassword4">Password</label>
-                                        <input type="password" class="form-control" id="inputPassword4" name="password"
-                                            placeholder="Password">
-                                    </div>
+
+                                <div class="form-group">
+                                    <label for="myFile">upload file</label>
+                                    <input type="file" id="keyword-file" name="myfile">
+
                                 </div>
 
 
-                                <div class="form-row">
+
+                                <button type="submit" id="add-key" class="btn btn-primary">Upload</button>
+                            </form>
 
 
-                                    <div class="form-group col-md-4">
-                                        <label for="inputState">Jobs</label>
-                                        <select id="inputState" class="form-control" name="jobs">
-                                            <option value="add-service">Add-Service</option>
-                                            <option value="add-tld">Add-TLD</option>
-                                            <option value="confirm-tld">Confirm-TLD</option>
-                                            <option value="add-keyword">Add-keyword</option>
-                                            <option value="approvel">Approvel</option>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" onload="setStyle(event)">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="body">
+                        <div class="table-responsive">
+
+                            <div class="alert">
+                                <span style="color: red; padding-left:250px" id="errMsgsubcat"></span>
+                                <span style="color:green; padding-left:250px" id="success-msg"></span>
+                            </div>
+
+
+                            <div class="row" id="drag">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <h5>select service</h5>
+                                        <select class="form-select" id="ser-key">
+                                            {{#each service}}
+                                            <option value="{{this._id}}">{{this.keyword_collection}}</option>
+                                            {{/each}}
                                         </select>
                                     </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+
+                                        <h5 id="afteruploadmsg" style="display:none;"></h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row lists" id="tst">
+                                <div class="col-md-4">
+
+                                    <div class="list" id="dis">
+
+                                        {{#each keywords}}
 
 
+
+
+                                        <div class="accordion" name="tst" id="d{{this._id}}" class="example-draggable"
+                                            draggable="true" ondragstart="onDragStart(event);">
+                                            <input style="display: none;" type="text" name="cat" id="d{{this._id}}i"
+                                                value="{{this.keyword_name}}">
+                                            <div class="accordion-item" id="tesssst">
+                                                <h2 class="accordion-header" id="headingTwo"> <button
+                                                        value="{{this.keyword_name}}" id="d{{this._id}}b"
+                                                        class="accordion-button collapsed" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#d{{this._id}}t"
+                                                        aria-expanded="false" aria-controls="d{{this._id}}t">
+                                                        <i id="add-b" class="fas fa-plus-circle add-b"
+                                                            style="padding: 10px;"></i>
+                                                        {{this.keyword_name}}<i id="bb" class="fas fa-plus-circle add-a"
+                                                            style="padding: 10px;" ondragover="onDragOver(event);"
+                                                            ondrop="onDrop(event);"></i>
+                                                             <i class="fas fa-pen" style="padding: 10px;"
+                                                            onclick="editKey(this)"></i>
+                                                        <i class="fas fa-minus-circle" style="padding: 10px;"
+                                                            onclick="delKey(this)"></i>
+                                                        <br>
+                                                       
+                                                    </button><input sty type="text" value="{{this.keyword_name}}"
+                                                        style="display: none !important;"></h2>
+
+
+                                            </div>
+
+                                        </div>
+                                        <br>
+
+
+                                        {{/each}}
+
+
+                                    </div>
                                 </div>
 
-                                <button type="submit" id="add-user" class="btn btn-primary">Add User</button>
-                            </form>
+
+                                <div class="col-md-4">
+                                    <form action="relation-form" id="relation-form">
+                                        <div class="list list2" id="list2" ondragover="onDragOver(event);"
+                                            ondrop="onDrop(event);">
+
+
+                                        </div>
+                                        <button id="relation-submit">submit</button>
+
+                                    </form>
+
+                                </div>
+                            </div>
+                            <div class="modal" tabindex="-1" role="dialog">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Modal title</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="text" name="modal-input" id="modal-input" value="">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" id="modal-save">Save
+                                                changes</button>
+                                            <button type="button" class="btn btn-secondary" id="modal-close"
+                                                data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-                    <div class="header">
-                        <h2>
-                            <strong>TDL</strong> Details
-                        </h2>
-                        <ul class="header-dropdown m-r--5">
-                            <li class="dropdown">
-                                <a href="#" onClick="return false;" class="dropdown-toggle" data-toggle="dropdown"
-                                    role="button" aria-haspopup="true" aria-expanded="false">
-                                    <i class="material-icons">more_vert</i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li>
-                                        <a href="#" onClick="return false;">Action</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" onClick="return false;">Another action</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" onClick="return false;">Something else here</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="body" id="subadmin-tdl-status">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover js-basic-example dataTable"
-                                id="subadmin-tld">
-                                <thead>
-                                    <tr>
-                                        <th>TABLE_NAME</th>
-                                        <th>STATUS</th>
-                                        <th>Added user</th>
-                                        <th>add Time</th>
-                                        <th>add Date</th>
-                                        <th>Action</th>
-
-                                </thead>
-                                <tbody>
-                                    {{#each data}}
-                                    <tr>
-                                        <td>{{this.keyword_collection}}</td>
-                                        <td>{{this.status}}</td>
-                                        <td>{{this.updateUser}}</td>
-                                        <td>{{this.addTime}}</td>
-                                        <td>{{this.addDate}}</td>
-                                        <td>
-                                            <button class="btn  btn-outline-success" value="approved" id="{{this._id}}"
-                                                onclick="updateCollection(event)">
-                                                Approve
-                                            </button>
-                                            <button class="btn  btn-outline-danger" value="rejected" id="{{this._id}}"
-                                                onclick="updateCollection(event)">
-                                                Reject
-                                            </button>
-                                        </td>
-
-
-                                    </tr>
-                                    {{/each}}
-
-                                    </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-                    <div class="header">
-                        <h2>
-                            <strong>password changing</strong> Requests
-                        </h2>
-                        <ul class="header-dropdown m-r--5">
-                            <li class="dropdown">
-                                <a href="#" onClick="return false;" class="dropdown-toggle" data-toggle="dropdown"
-                                    role="button" aria-haspopup="true" aria-expanded="false">
-                                    <i class="material-icons">more_vert</i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li>
-                                        <a href="#" onClick="return false;">Action</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" onClick="return false;">Another action</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" onClick="return false;">Something else here</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="body" id="reset-password-approvel">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover js-basic-example dataTable"
-                                id="subadmin-tld">
-                                <thead>
-                                    <tr>
-                                        <th>User Name</th>
-                                        <th>Email</th>
-                                        <th>Mobile</th>
-                                        <th>Jobs</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-
-                                </thead>
-                                <tbody>
-                                    {{#each passUsers}}
-                                    <tr>
-                                        <td>{{this.username}}</td>
-                                        <td>{{this.email}}</td>
-                                        <td>{{this.mobile}}</td>
-                                        <td>{{this.jobs}}</td>
-                                        <td>{{this.status}}</td>
-                                        <td>
-                                            <button class="btn  btn-outline-success" value="approved" id="{{this._id}}"
-                                                onclick="resetPasswordAprovel(event)">
-                                                Approve
-                                            </button>
-                                            <button class="btn  btn-outline-danger" value="rejected" id="{{this._id}}"
-                                                onclick="resetPasswordAprovel(event)">
-                                                Reject
-                                            </button>
-                                        </td>
-
-
-                                    </tr>
-                                    {{/each}}
-
-                                    </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 </section>
