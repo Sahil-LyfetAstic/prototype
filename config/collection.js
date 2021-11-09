@@ -1,5 +1,5 @@
 module.exports = {
-    ADMIN_COLLECTION:'admin',
+    ADMIN_COLLECTION:'ADMIN_USERS',
     //tld table
     TOP_LEVEL_DOMAIN:'tld_collection',
     NO_EMAIL_USER:'user_no_email',

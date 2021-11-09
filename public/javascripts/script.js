@@ -1,4 +1,3 @@
-
 $("#login-submit").on("click", () => {
   $("#admin-login").validate({
     rules: {
@@ -18,7 +17,26 @@ $("#login-submit").on("click", () => {
       $(element).css("border-color", "green");
       $(element).parent().removeClass("error");
     },
-    onsubmit: true,
+
+    submitHandler: (form) => {
+      $.ajax({
+        url: form.action,
+        type: form.method,
+        data: $(form).serialize(),
+        success: (response) => {
+          console.log(response);
+          if (response.user === false) {
+            alert("no user found");
+          } else if (response.status === false) {
+            alert("cannot login at this time");
+          } else if (response.passId === false) {
+            alert("Incorrect password");
+          } else {
+            window.location.href = response;
+          }
+        },
+      });
+    },
   });
 });
 
@@ -220,14 +238,13 @@ $("#add-user").on("click", (e) => {
         type: form.method,
         data: $(form).serialize(),
         success: (response) => {
+          console.log(response);
           if (response === true) {
-            $("#msg").html("added succes").css("color", "green");
-            $("#msg").delay(1000).hide(0);
-            setTimeout(function () {
-              location.reload();
-            }, 100);
+            alert("user added successfully");
+          } else if (response.user === true) {
+            alert("user already exist");
           } else {
-            console.log(false);
+            alert("cannot add this user");
           }
         },
       });
@@ -355,7 +372,7 @@ $("#add-keywords").on("click", (e) => {
   e.preventDefault();
   let keyword_collection = document.getElementById("keyword_collection").value;
   let status = "pending";
-  console.log(keyword_collection)
+  console.log(keyword_collection);
   console.log(keyword_collection);
   if (keyword_collection === "") {
     alert("enter keyword to continue");
@@ -403,18 +420,21 @@ $("#add-keyword-form").submit((e) => {
     data: new FormData(document.getElementById("add-keyword-form")),
     processData: false,
     contentType: false,
-    success:(response)=>{
-      if(response === true){
-        console.log(response)
+    success: (response) => {
+      if (response === true) {
+        console.log(response);
         $("#uploadmsg").html("added succes").css("color", "green").show();
         $("#uploadmsg").delay(1000).hide(0);
         $("#add-keyword-form").load(location.href + " #add-keyword-form");
-      }else{
-        $("#uploadmsg").html("file format not support").css("color", "red").show();
+      } else {
+        $("#uploadmsg")
+          .html("file format not support")
+          .css("color", "red")
+          .show();
         $("#uploadmsg").delay(1000).hide(0);
         $("#add-keyword-form").load(location.href + " #add-keyword-form");
       }
-    }
+    },
   });
 
   // return false;
@@ -632,7 +652,6 @@ $("#add-keyword-form").submit((e) => {
 //     let newKeyword = second + " " + first;
 //     console.log("parrentid  ",parrentId, " ", document.getElementById(parrentId                                                                                                                                                                                                                                 ))
 //     console.log("inputid  ",inputId, " ", document.getElementById(inputId))
-    
 
 //     let html =
 //       '<input style="display: none;" type="text" name="cat" id="' +
@@ -736,7 +755,6 @@ $("#add-keyword-form").submit((e) => {
 //   el.parentNode.removeChild(el);
 // }
 
-
 function onDragStart(event) {
   event.dataTransfer.setData("text/plain", event.target.id);
   event.dataTransfer.effectAllowed = "copy";
@@ -750,7 +768,7 @@ let count = 1;
 
 function onDrop(event) {
   const dropzone = event.target;
-  console.log(dropzone)
+  console.log(dropzone);
   event.target.style.backgroundColor = "#ededed";
   if (dropzone.className === "list list2") {
     const id = event.dataTransfer.getData("text");
@@ -899,48 +917,44 @@ function onDrop(event) {
     let secondId = id.split("-")[0].replace(/-/g, "");
     const secondValue = document.getElementById(secondId + "i").value;
     const keyword = secondValue + " " + firstValue.trim();
-   
 
     let html =
-    '<input type="text" name="duplicate" value="' +
-    keyword +
-    '" id="' +
-    parrentId +
-    'i" style="display: none;">' +
-    '<button value="' +
-    keyword +
-    '" style="all: unset;" id="' +
-    parrentId +
-    'b">' +
-    '<i id="add-b" class="fas fa-download add-b" onclick="pre(event)" style="padding: 13px 30px 13px 30px; font-size:17px;"></i>' +
-    "" +
-    keyword +
-    '<i id="' +
-    parrentId +
-    '-a" ' +
-    'class="fas fa-download add-a" onclick="pre(event)" style="padding: 13px 30px 13px 30px; font-size:17px;"' +
-    'ondragover="onDragOver(event);" ondrop="onDrop(event);"></i>' +
-    '<i class="fas fa-pen-square" style="padding: 13px 30px 13px 152px; font-size:17px;cursor: pointer;" onclick="editKeyword(event,this)"></i>' +
-    '<i class="fas fa-trash" style="padding: 10px;cursor: pointer;"' +
-    'onclick="delKey(event,this)" id="' +
-    parrentId +
-    'd"></i>' +
-    "</button>";
-
+      '<input type="text" name="duplicate" value="' +
+      keyword +
+      '" id="' +
+      parrentId +
+      'i" style="display: none;">' +
+      '<button value="' +
+      keyword +
+      '" style="all: unset;" id="' +
+      parrentId +
+      'b">' +
+      '<i id="add-b" class="fas fa-download add-b" onclick="pre(event)" style="padding: 13px 30px 13px 30px; font-size:17px;"></i>' +
+      "" +
+      keyword +
+      '<i id="' +
+      parrentId +
+      '-a" ' +
+      'class="fas fa-download add-a" onclick="pre(event)" style="padding: 13px 30px 13px 30px; font-size:17px;"' +
+      'ondragover="onDragOver(event);" ondrop="onDrop(event);"></i>' +
+      '<i class="fas fa-pen-square" style="padding: 13px 30px 13px 152px; font-size:17px;cursor: pointer;" onclick="editKeyword(event,this)"></i>' +
+      '<i class="fas fa-trash" style="padding: 10px;cursor: pointer;"' +
+      'onclick="delKey(event,this)" id="' +
+      parrentId +
+      'd"></i>' +
+      "</button>";
 
     let isKey = sorting(keyword);
     if (isKey === true) {
       document.getElementById(parrentId).style.backgroundColor = "#f79a71";
       document.getElementById(parrentId).innerHTML = html;
     } else {
-
       document.getElementById(parrentId).style.backgroundColor =
         "rgb(223 227 226 / 77%)";
       document.getElementById(parrentId).innerHTML = html;
     }
-  }
-  else{
-    event.preventDefault()
+  } else {
+    event.preventDefault();
   }
 }
 
@@ -1050,7 +1064,7 @@ $("#relation-form").submit((e) => {
             .css("color", "green")
             .show();
           // $("#afteruploadmsg").delay(1000).hide(0);
-          alert('successfully submitted')
+          alert("successfully submitted");
           $("#list2").empty();
           $("#edited").load(location.href + " #edited");
           $("#key-count").load(location.href + " #key-count");
@@ -1088,52 +1102,47 @@ function sorting(keyword) {
   return key;
 }
 
-
-function pre(event){
-  event.preventDefault()
+function pre(event) {
+  event.preventDefault();
 }
 
-
-
 ///////reset password
-$('#reset-password').click((e)=>{
-  const email = document.getElementById('email').value
-  e.preventDefault()
-  if(!email){
-    alert("enter email to continue")
-  }else{
+$("#reset-password").click((e) => {
+  const email = document.getElementById("email").value;
+  e.preventDefault();
+  if (!email) {
+    alert("enter email to continue");
+  } else {
     $.ajax({
-      url:'/reset-password',
-      type:'post',
-      data:{
-        email
+      url: "/reset-password",
+      type: "post",
+      data: {
+        email,
       },
-      success:(response)=>{
-        if(response === 'no-user'){
-          alert('no user found')
-        }else if(response === "wrong"){
-          alert("something went wrong")
-        }else if(response === "submited"){
-          alert("password will send shortly")
+      success: (response) => {
+        if (response === "no-user") {
+          alert("no user found");
+        } else if (response === "wrong") {
+          alert("something went wrong");
+        } else if (response === "submited") {
+          alert("password will send shortly");
         }
-      }
-    })
+      },
+    });
   }
-})
-
-
+});
 
 // let timerOn = true;
 
 // function timer(remaining) {
 //   var m = Math.floor(remaining / 60);
 //   var s = remaining % 60;
-  
+
 //   m = m < 10 ? '0' + m : m;
 //   s = s < 10 ? '0' + s : s;
 //   document.getElementById('timer').innerHTML = m + ':' + s;
 //   remaining -= 1;
-  
+
 //   if(remaining >= 0 && timerOn) {
 //     setTimeout(function() {
 //         timer(remaining);
@@ -1145,31 +1154,32 @@ $('#reset-password').click((e)=>{
 //     // Do validate stuff here
 //     return;
 //   }
-  
+
 //   // Do timeout stuff here
 //   alert('Timeout for otp');
 // }
 
 // timer(120);
 
-
-function resetPasswordAprovel(event){
-  event.preventDefault()
+function resetPasswordAprovel(event) {
+  event.preventDefault();
   let status = event.target.value;
   let id = event.target.id;
   $.ajax({
-    url:"/update-reset-password",
-    type:'post',
-    data:{
+    url: "/update-reset-password",
+    type: "post",
+    data: {
       status,
-      id
+      id,
     },
-    success:(response)=>{
-      if(!response){
-        alert("something wrong")
-      }else{
-        $("#reset-password-approvel").load(location.href + " #reset-password-approvel");
+    success: (response) => {
+      if (!response) {
+        alert("something wrong");
+      } else {
+        $("#reset-password-approvel").load(
+          location.href + " #reset-password-approvel"
+        );
       }
-    }
-  })
+    },
+  });
 }

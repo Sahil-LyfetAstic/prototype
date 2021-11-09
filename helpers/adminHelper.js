@@ -3,30 +3,35 @@ const collection = require("../config/collection");
 const objId = require("mongodb").ObjectId;
 
 module.exports = {
-  doLogin: (userData) => {
-    console.log(userData);
+  doLogin: (userData,collId) => {
     let response = {};
     return new Promise((resolve, reject) => {
       db.get()
-        .collection(collection.ADMIN_COLLECTION)
+        .collection(collId)
         .findOne({ username: userData.username })
         .then((user) => {
-          if (user.status === false) {
-            console.log("status ");
+          console.log(user)
+          if (!user) {
+            response.user = false
+            resolve(response);
+          } else if (user.status === false) {
+            response.status = false
+            resolve(response)
           } else {
             if (user.password == userData.password) {
               resolve(user);
             } else {
-              console.log("incorrect password");
+              response.passId = false
+              resolve(response)
             }
           }
         });
     });
   },
-  addAdminUser: (userData) => {
+  addAdminUser: (userData, collId) => {
     return new Promise((resolve, reject) => {
       db.get()
-        .collection(collection.ADMIN_COLLECTION)
+        .collection(collId)
         .insertOne(userData)
         .then((status) => {
           if (status) resolve(true);
@@ -34,11 +39,11 @@ module.exports = {
         });
     });
   },
-  ifUser: (emailId) => {
+  ifUser: (emailId,collId) => {
     return new Promise(async (resolve, reject) => {
       await db
         .get()
-        .collection(collection.ADMIN_COLLECTION)
+        .collection(collId)
         .findOne({ email: emailId })
         .then((user) => {
           if (user) resolve(user);
@@ -103,4 +108,5 @@ module.exports = {
         .catch((err) => reject(err));
     });
   },
+  
 };

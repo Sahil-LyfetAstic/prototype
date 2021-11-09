@@ -13,8 +13,9 @@ const upload = multer({ dest: "upload/" });
 var docxParser = require("docx-parser");
 const passGenerator = require("otp-generator");
 const mailer = require("../helpers/mailer");
+const collection = require("../config/collection");
 const verifyLogin = (req, res, next) => {
-  if (req.session.subadmin) {
+  if (req.session.admin) {
     next();
   } else {
     res.redirect("/login");
@@ -25,14 +26,16 @@ router.get("/login", (req, res) => {
   res.render("user/login", { user: true });
 });
 router.post("/login", (req, res) => {
-  adminHelper.doLogin(req.body).then((response) => {
-    if (response) {
-      console.log(response.jobs);
-      req.session.subadmin = true;
+  adminHelper.doLogin(req.body,collection.ADMIN_COLLECTION).then((response) => {
+    console.log(response)
+    if (response._id) {
+      req.session.admin = true;
       req.session.jobs = response.jobs;
       req.session.username = response.username;
-
-      res.redirect("/" + response.jobs);
+      req.session.userType = response.usertype
+      res.send(response.jobs)
+    }else{
+      res.send(response)
     }
   });
 });
@@ -40,12 +43,15 @@ router.post("/login", (req, res) => {
 //// add -service
 
 router.get("/add-service", verifyLogin, (req, res) => {
+  let userType;
+  if(req.session.userType === 'ADMIN_USERS') userType = true
   serviceHelper.getAprovedService().then((approvedService) => {
     serviceHelper.getService().then((service) => {
-      res.render("subAdmin/add-service", {
+      res.render("admin/add-service", {
         admin: true,
         service,
         approvedService,
+        userType
       });
     });
   });
@@ -54,7 +60,7 @@ router.get("/add-service", verifyLogin, (req, res) => {
 //add - tld
 router.get("/add-tld", verifyLogin, (req, res) => {
   tldHelper.getTld().then((data) => {
-    res.render("subAdmin/add-tld", { admin: true, data });
+    res.render("admin/add-tld", { admin: true, data });
   });
 });
 
@@ -64,7 +70,7 @@ router.get("/confirm-tld", (req, res) => {
   tldHelper.getTld().then((data) => {
     serviceHelper.getService().then((serviceData) => {
       console.log(serviceData);
-      res.render("subAdmin/confirm-tld", { admin: true, data, serviceData });
+      res.render("admin/confirm-tld", { admin: true, data, serviceData });
     });
   });
 });
@@ -72,7 +78,7 @@ router.get("/confirm-tld", (req, res) => {
 router.get("/add-keyword", (req, res) => {
   keywordHelper.getCollectionName().then((data) => {
     keywordHelper.getAprovedColl().then((coll) => {
-      res.render("subAdmin/add-keyword", { admin: true, data, coll });
+      res.render("admin/add-keyword", { admin: true, data, coll });
     });
   });
 });
@@ -187,13 +193,13 @@ router.post("/add-category", (req, res) => {
 router.get("/servtst", (req, res) => {
   serviceHelper.getService().then((serviceData) => {
     console.log(serviceData);
-    res.render("subAdmin/service", { serviceData });
+    res.render("admin/service", { serviceData });
   });
 });
 
 router.get("/cat-tree", (req, res) => {
   keywordHelper.getAprovedColl().then((collName) => {
-    res.render("subAdmin/category-tree", { admin: true, collName });
+    res.render("admin/category-tree", { admin: true, collName });
   });
 });
 
@@ -314,7 +320,7 @@ router.get("/drag", (req, res) => {
     let coll = "Real_Estate";
     keywordHelper.getCsv(coll).then((keywords) => {
       console.log(keywords);
-      res.render("subAdmin/drag-and-drop", { admin: true, keywords });
+      res.render("admin/drag-and-drop", { admin: true, keywords });
     });
   });
 });
@@ -324,7 +330,7 @@ router.get("/cat", (req, res) => {
     let coll = "Real_Estate";
     console.log(service);
     keywordHelper.getCsv(coll).then((keywords) => {
-      res.render("subAdmin/cat-test", { admin: true, service, keywords });
+      res.render("admin/cat-test", { admin: true, service, keywords });
     });
   });
 });
@@ -354,9 +360,7 @@ router.post("/submit-keyword", (req, res) => {
   }
 });
 
-router.post("/test", (req, res) => {
-  console.log(req.body);
-});
+
 
 router.get("/reset-password", (req, res) => {
   res.render("user/reset-pass", { user: true });
@@ -388,5 +392,23 @@ router.post("/reset-password", (req, res) => {
     }
   });
 });
+
+router.post('/add-deptuser',(req,res)=>{
+  let resp = {};
+ adminHelper.ifUser(req.body.email,collection.ADMIN_COLLECTION).then((user)=>{
+   if(!user){
+    req.body.status = true;
+    req.body.usertype = 'DEPT_USERS'
+    req.body.addedUser = req.session.username
+    adminHelper.addAdminUser(req.body,collection.ADMIN_COLLECTION).then((resp)=>{
+      if(!resp) console.log(resp)
+      else res.json(true)
+    })
+   }else {
+    resp.user = true;
+      res.json(resp);
+   }
+ })
+})
 
 module.exports = router;
