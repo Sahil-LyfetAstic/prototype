@@ -25,9 +25,9 @@ const verifyLogin = (req, res, next) => {
 router.get("/login", (req, res) => {
   res.render("user/login", { user: true });
 });
+
 router.post("/login", (req, res) => {
   adminHelper.doLogin(req.body,collection.ADMIN_COLLECTION).then((response) => {
-    console.log(response)
     if (response._id) {
       req.session.admin = true;
       req.session.jobs = response.jobs;
@@ -44,6 +44,8 @@ router.post("/login", (req, res) => {
 
 router.get("/add-service", verifyLogin, (req, res) => {
   let userType;
+  let userPriv =  req.session.userType
+  let userName = req.session.username
   if(req.session.userType === 'ADMIN_USERS') userType = true
   serviceHelper.getAprovedService().then((approvedService) => {
     serviceHelper.getService().then((service) => {
@@ -51,7 +53,9 @@ router.get("/add-service", verifyLogin, (req, res) => {
         admin: true,
         service,
         approvedService,
-        userType
+        userType,
+        userName,
+        userPriv
       });
     });
   });
@@ -367,7 +371,7 @@ router.get("/reset-password", (req, res) => {
 });
 
 router.post("/reset-password", (req, res) => {
-  adminHelper.ifUser(req.body.email).then((user) => {
+  adminHelper.ifUser(req.body.email,collection.ADMIN_COLLECTION).then((user) => {
     if (!user) {
       res.send("no-user");
     } else {

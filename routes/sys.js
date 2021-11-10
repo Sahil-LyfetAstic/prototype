@@ -10,29 +10,32 @@ const collection = require("../config/collection");
 /* GET users listing. */
 
 router.get("/sysadmin", (req, res) => {
-  keywordHelper.getCollectionName().then((data) => {
+  serviceHelper.getService().then((service) => {
+    console.log(service)
     sysHelper.passChangingReq(false).then((passUsers) => {
-      res.render("sysadmin/sysadmin-home", { admin: true, data, passUsers });
+      res.render("sysadmin/sysadmin-home", { admin: true, service, passUsers });
     });
   });
 });
 
 router.post("/add-adminuser", (req, res) => {
   let resp = {};
-  adminHelper.ifUser(req.body.email,collection.ADMIN_COLLECTION).then((user) => {
-    if (!user) {
-      req.body.status = true;
-      req.body.usertype = "ADMIN_USERS";
-      adminHelper
-        .addAdminUser(req.body, collection.ADMIN_COLLECTION)
-        .then((response) => {
-          res.json(true);
-        });
-    } else {
-      resp.user = true;
-      res.json(resp);
-    }
-  });
+  adminHelper
+    .ifUser(req.body.email, collection.ADMIN_COLLECTION)
+    .then((user) => {
+      if (!user) {
+        req.body.status = true;
+        req.body.usertype = "ADMIN_USERS";
+        adminHelper
+          .addAdminUser(req.body, collection.ADMIN_COLLECTION)
+          .then((response) => {
+            res.json(true);
+          });
+      } else {
+        resp.user = true;
+        res.json(resp);
+      }
+    });
 });
 
 router.post("/update-reset-password", (req, res) => {

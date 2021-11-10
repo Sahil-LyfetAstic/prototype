@@ -87,6 +87,7 @@ function updateTld(event) {
 }
 
 $(document).ready(function () {
+  $('#admin-table').DataTable();
   let ext = document.getElementById("extention").value;
   $("#basic-addon2").html(ext);
 });
