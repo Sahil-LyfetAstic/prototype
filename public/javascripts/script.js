@@ -18,7 +18,8 @@ $("#login-submit").on("click", () => {
       $(element).parent().removeClass("error");
     },
 
-    submitHandler: (form) => {
+    submitHandler: (form, event) => {
+      event.preventDefault();
       $.ajax({
         url: form.action,
         type: form.method,
@@ -87,7 +88,7 @@ function updateTld(event) {
 }
 
 $(document).ready(function () {
-  $('#admin-table').DataTable();
+  $("#admin-table").DataTable();
   let ext = document.getElementById("extention").value;
   $("#basic-addon2").html(ext);
 });
@@ -242,10 +243,13 @@ $("#add-user").on("click", (e) => {
           console.log(response);
           if (response === true) {
             alert("user added successfully");
+            form.reset();
           } else if (response.user === true) {
             alert("user already exist");
+            form.reset();
           } else {
             alert("cannot add this user");
+            form.reset();
           }
         },
       });
@@ -266,10 +270,10 @@ $("#add-user").on("click", (e) => {
 
 $("#addService").on("click", (e) => {
   e.preventDefault();
-  console.log("button clicked");
   let service = document.getElementById("service").value;
+  let form = document.getElementById('add-service')
   if (service === "") {
-    alert("empty category");
+    alert("empty service");
   } else {
     $.ajax({
       url: "add-service",
@@ -280,11 +284,16 @@ $("#addService").on("click", (e) => {
       success: (res) => {
         console.log(res);
         if (res.category === true) {
-          alert("category exist");
+          alert("service already exist");
+          form.reset()
         } else if (res.added === true) {
-          alert("category addedd successfully");
+          alert("service addedd successfully");
+          form.reset()
+          $(".service-table").load(location.href + " .service-table");
+          $(".service-approvel").load(location.href + " .service-approvel");
         } else {
-          alert("cannot add this category");
+          alert("cannot add this service");
+          form.reset()
         }
       },
     });
@@ -315,9 +324,9 @@ function updateStatus(event) {
     },
     success: (res) => {
       if (res === true) {
-        $("#service_table").load(location.href + " #service_table");
+        $(".service-approvel").load(location.href + " .service-approvel");
       } else if (res === false) {
-        console.log("cannot add this");
+        alert("something went wrong")
       }
     },
   });

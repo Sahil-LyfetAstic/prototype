@@ -6,10 +6,17 @@ const serviceHelper = require("../helpers/ServieHelpers");
 const sysHelper = require("../helpers/sysHelper");
 const mailer = require("../helpers/mailer");
 const collection = require("../config/collection");
+const verifyLogin = (req,res,next)=>{
+  if(req.session.admin){
+    next()
+  }else{
+    res.redirect('/login')
+  }
+}
 
 /* GET users listing. */
 
-router.get("/sysadmin", (req, res) => {
+router.get("/sysadmin", verifyLogin,(req, res) => {
   serviceHelper.getService().then((service) => {
     console.log(service)
     sysHelper.passChangingReq(false).then((passUsers) => {

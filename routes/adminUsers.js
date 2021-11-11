@@ -40,6 +40,9 @@ router.post("/login", (req, res) => {
   });
 });
 
+
+//sys admin redirection
+
 //// add -service
 
 router.get("/add-service", verifyLogin, (req, res) => {
