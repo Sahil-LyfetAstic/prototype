@@ -360,12 +360,15 @@
                                         <td>{{this.adminUpdatedDate}}</td>
                                         <td>{{this.status}}</td>
                                         <td>
-                                            <button class="btn  btn-outline-success" value="approved" id="{{this._id}}" onclick="updateStatus(event)">
-                                                Approve
+                                    
+                                         
+                                            <button class="btn  btn-outline-success" value="{{this.btn1}}" id="{{this._id}}" onclick="updateStatus(event)">
+                                                {{this.btn1}}
                                             </button>
-                                            <button class="btn  btn-outline-danger" value="rejected" id="{{this._id}}" onclick="updateStatus(event)">
-                                                Reject
+                                            <button class="btn  btn-outline-danger" value="{{this.btn2}}" id="{{this._id}}" onclick="updateStatus(event)">
+                                                {{this.btn2}}
                                             </button>
+                                        
                                         </td>  
                                     
 
@@ -413,6 +416,7 @@
                                         <td>{{this.jobs}}</td>
                                         <td>{{this.status}}</td>
                                         <td>
+                                            
                                             <button class="btn  btn-outline-success" value="approved" id="{{this._id}}"
                                                 onclick="resetPasswordAprovel(event)">
                                                 Approve

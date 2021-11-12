@@ -18,9 +18,12 @@ const verifyLogin = (req,res,next)=>{
 
 router.get("/sysadmin", verifyLogin,(req, res) => {
   serviceHelper.getService().then((service) => {
-    console.log(service)
     sysHelper.passChangingReq(false).then((passUsers) => {
-      res.render("sysadmin/sysadmin-home", { admin: true, service, passUsers });
+      res.render("sysadmin/sysadmin-home", 
+      { admin: true, 
+        service, 
+        passUsers,
+        });
     });
   });
 });

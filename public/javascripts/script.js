@@ -271,6 +271,8 @@ $("#add-user").on("click", (e) => {
 $("#addService").on("click", (e) => {
   e.preventDefault();
   let service = document.getElementById("service").value;
+  let btn1 = 'approve'
+  let btn2 = 'reject'
   let form = document.getElementById('add-service')
   if (service === "") {
     alert("empty service");
@@ -280,6 +282,8 @@ $("#addService").on("click", (e) => {
       type: "post",
       data: {
         service,
+        btn1,
+        btn2
       },
       success: (res) => {
         console.log(res);
@@ -313,14 +317,26 @@ function getFormData(formName) {
 
 function updateStatus(event) {
   event.preventDefault();
+  let btn1,btn2
   let status = event.target.value;
   let id = event.target.id;
+  if(status === 'approve') {
+    btn1 = 'suspend'
+    btn2 = 'dismiss'
+    status = status+'d'
+  }else{
+    btn1 = 'approve'
+    btn2 = 'reject'
+    status =   status+'ed'
+  }
   $.ajax({
     url: "update-service",
     type: "post",
     data: {
       status,
       id,
+      btn1,
+      btn2
     },
     success: (res) => {
       if (res === true) {

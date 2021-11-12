@@ -51,11 +51,13 @@ module.exports = {
               status: serviceData.status,
               adminUpdatedDate: serviceData.adminUpdatedDate,
               adminUpdateTime: serviceData.adminUpdateTime,
-            }
-          },
+              btn1: serviceData.btn1,
+              btn2: serviceData.btn2,
+            },
+          }
         )
         .then((status) => {
-          console.log(status)
+          console.log(status);
           status ? resolve(true) : console.log("service add error");
         });
     });
@@ -98,7 +100,7 @@ module.exports = {
             $push: {
               relation: serviceId,
             },
-          },
+          }
         )
         .then((status) => {
           console.log(status);
@@ -114,7 +116,7 @@ module.exports = {
         .find({ status: "approved" })
         .toArray()
         .then((status) => {
-          console.log(status)
+          console.log(status);
           status ? resolve(status) : console.log("something fishy");
         });
     });

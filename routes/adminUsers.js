@@ -27,19 +27,20 @@ router.get("/login", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  adminHelper.doLogin(req.body,collection.ADMIN_COLLECTION).then((response) => {
-    if (response._id) {
-      req.session.admin = true;
-      req.session.jobs = response.jobs;
-      req.session.username = response.username;
-      req.session.userType = response.usertype
-      res.send(response.jobs)
-    }else{
-      res.send(response)
-    }
-  });
+  adminHelper
+    .doLogin(req.body, collection.ADMIN_COLLECTION)
+    .then((response) => {
+      if (response._id) {
+        req.session.admin = true;
+        req.session.jobs = response.jobs;
+        req.session.username = response.username;
+        req.session.userType = response.usertype;
+        res.send(response.jobs);
+      } else {
+        res.send(response);
+      }
+    });
 });
-
 
 //sys admin redirection
 
@@ -47,9 +48,9 @@ router.post("/login", (req, res) => {
 
 router.get("/add-service", verifyLogin, (req, res) => {
   let userType;
-  let userPriv =  req.session.userType
-  let userName = req.session.username
-  if(req.session.userType === 'ADMIN_USERS') userType = true
+  let userPriv = req.session.userType;
+  let userName = req.session.username;
+  if (req.session.userType === "ADMIN_USERS") userType = true;
   serviceHelper.getAprovedService().then((approvedService) => {
     serviceHelper.getService().then((service) => {
       res.render("admin/add-service", {
@@ -58,7 +59,7 @@ router.get("/add-service", verifyLogin, (req, res) => {
         approvedService,
         userType,
         userName,
-        userPriv
+        userPriv,
       });
     });
   });
@@ -367,55 +368,59 @@ router.post("/submit-keyword", (req, res) => {
   }
 });
 
-
-
 router.get("/reset-password", (req, res) => {
   res.render("user/reset-pass", { user: true });
 });
 
 router.post("/reset-password", (req, res) => {
-  adminHelper.ifUser(req.body.email,collection.ADMIN_COLLECTION).then((user) => {
-    if (!user) {
-      res.send("no-user");
-    } else {
-      const passId = passGenerator.generate(4, {
-        upperCase: false,
-        specialChars: false,
-      });
-      adminHelper.updatePass(passId, user._id).then((resp) => {
-        if (!resp) res.send("wrong");
-        else {
-          adminHelper.getUser(user._id).then((user) => {
-            if (!user) res.send("wrong");
-            else {
-              adminHelper.updateUserStatus(user._id, false).then((user) => {
-                if (!user) res.send("wrong");
-                else res.send("submited");
-              });
-            }
-          });
-        }
-      });
-    }
-  });
+  adminHelper
+    .ifUser(req.body.email, collection.ADMIN_COLLECTION)
+    .then((user) => {
+      if (!user) {
+        res.send("no-user");
+      } else {
+        const passId = passGenerator.generate(4, {
+          upperCase: false,
+          specialChars: false,
+        });
+        adminHelper.updatePass(passId, user._id).then((resp) => {
+          if (!resp) res.send("wrong");
+          else {
+            adminHelper.getUser(user._id).then((user) => {
+              if (!user) res.send("wrong");
+              else {
+                adminHelper.updateUserStatus(user._id, false).then((user) => {
+                  if (!user) res.send("wrong");
+                  else res.send("submited");
+                });
+              }
+            });
+          }
+        });
+      }
+    });
 });
 
-router.post('/add-deptuser',(req,res)=>{
+router.post("/add-deptuser", (req, res) => {
   let resp = {};
- adminHelper.ifUser(req.body.email,collection.ADMIN_COLLECTION).then((user)=>{
-   if(!user){
-    req.body.status = true;
-    req.body.usertype = 'DEPT_USERS'
-    req.body.addedUser = req.session.username
-    adminHelper.addAdminUser(req.body,collection.ADMIN_COLLECTION).then((resp)=>{
-      if(!resp) console.log(resp)
-      else res.json(true)
-    })
-   }else {
-    resp.user = true;
-      res.json(resp);
-   }
- })
-})
+  adminHelper
+    .ifUser(req.body.email, collection.ADMIN_COLLECTION)
+    .then((user) => {
+      if (!user) {
+        req.body.status = true;
+        req.body.usertype = "DEPT_USERS";
+        req.body.addedUser = req.session.username;
+        adminHelper
+          .addAdminUser(req.body, collection.ADMIN_COLLECTION)
+          .then((resp) => {
+            if (!resp) console.log(resp);
+            else res.json(true);
+          });
+      } else {
+        resp.user = true;
+        res.json(resp);
+      }
+    });
+});
 
 module.exports = router;
