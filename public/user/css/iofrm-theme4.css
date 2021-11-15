@@ -81,6 +81,8 @@
 .img-holder .bg {
     opacity: 1;
     background-image: none;
+    background-color: #ef474752;
+}
 }
 
 .form-holder {

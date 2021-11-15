@@ -2,33 +2,77 @@
 <html lang="en">
 <head>
 </head>
+<style>
+    body {
+        overflow: hidden !important;
+    }
+    .form-holder {
+        margin-left: 16%;
+        width: 100%;
+    }
+    .form-content .form-items {
+        max-width: 30%;
+        text-align: left;
+        padding: 0%;
+    }
+    .form-content h3 {
+    color: #000;
+    text-align: left;
+    font-size: 19px;
+}
+.form-content form {
+    margin-bottom: 30px;
+    padding: 8%;
+}
+.rounded-3 {
+    border-radius: 14.3rem!important;
+}
+.card {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0px solid rgba(0,0,0,.125)!important;
+    border-radius: 0.25rem;
+}
+.img-holder .bg {
+    opacity: 1;
+    background-image: none;
+    background-color: #aba4a452;
+}
+</style>
 <body>
-      <div class="form-body" >
-        <div  class="website-logo">
+    <div class="form-body">
+        <div class="website-logo">
             <a href="/">
-               
             </a>
         </div>
         <div class="row">
+          
             <div class="img-holder">
+                  <h2>Resurs Guide </h2>
                 <div class="bg"></div>
                 <div class="info-holder">
                     <img src="user/images/graphic1.svg" alt="http://localhost:3000/user/images/logo-light.svg">
-                   
                 </div>
             </div>
             <div class="form-holder">
                 <div class="form-content">
                     <div class="form-items">
-                       
-                       
-                        {{{body}}}
-                     
+                        <div class="card rounded-3">
+                            <div class="card-body p-0 md-5">
+                                {{{body}}}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </body>
 </html>
