@@ -423,4 +423,17 @@ router.post("/add-deptuser", (req, res) => {
     });
 });
 
+router.get("/manager", verifyLogin, (req, res) => {
+  console.log(req.session)
+  res.render("admin/manager", {
+    userName: req.session.username,
+    userPriv: req.session.jobs,
+    admin: true,
+  });
+});
+
+router.get("/hr", (req, res) => {
+  console.log("hai iam hr");
+  res.send("hai iam hr");
+});
 module.exports = router;

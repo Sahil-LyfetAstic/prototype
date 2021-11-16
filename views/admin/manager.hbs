@@ -1,0 +1,139 @@
+<aside id="leftsidebar" class="sidebar">
+    <!-- Menu -->
+    <div class="menu">
+        <ul class="list">
+            <li class="sidebar-user-panel active">
+                <div class="user-panel">
+                    <div class=" image">
+                        <img src="/admin/images/usrbig.jpg" class="img-circle user-img-circle" alt="User Image" />
+                    </div>
+                </div>
+                <div class="profile-usertitle">
+                    <div class="sidebar-userpic-name"> {{userName}} </div>
+                    <div class="profile-usertitle-job ">{{userPriv}}</div>
+                </div>
+            </li>
+            <li class="active">
+                <a href="#" onClick="return false;" class="menu-toggle">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <a href="subadmin">Home</a>
+                </a>
+            </li>
+            <li>
+                <a href="#" onClick="return false;" class="menu-toggle">
+                    <i class="fas fa-mail-bulk"></i>
+                    <span>Service Management</span>
+                </a>
+                <ul class="ml-menu">
+                    <li>
+                        <a href="#">status</a>
+                    </li>
+
+                </ul>
+            </li>
+
+
+        </ul>
+    </div>
+    <!-- #Menu -->
+</aside>
+<!-- #END# Left Sidebar -->
+<!-- Right Sidebar -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <div class="row">
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Admin Home</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a href="../../index.html">
+                                <i class="fas fa-home"></i> Resurs</a>
+                        </li>
+                        <li class="breadcrumb-item active">Add Service</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+
+
+
+
+
+
+        <div class="row clearfix" id="add-us">
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            <strong>Add</strong> users
+                        </h2>
+                        <h4 id="msg"></h4>
+                    </div>
+                    <div class="body" id="subadmin-tdl-status">
+                        <div class="table-responsive">
+                            <form id="add-adminuser" method="POST" , action="add-deptuser">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputusername">username</label>
+                                        <input type="text" class="form-control" id="inputusername" name="username"
+                                            placeholder="username">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Email</label>
+                                        <input type="email" class="form-control" id="inputEmail4" placeholder="Email"
+                                            name="email">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="mobile">Mobile</label>
+                                        <input type="tel" class="form-control" id="mobile" placeholder="Mobile"
+                                            name="mobile">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputPassword4">Password</label>
+                                        <input type="password" class="form-control" id="inputPassword4" name="password"
+                                            placeholder="Password">
+                                    </div>
+                                </div>
+
+
+                                <div class="form-row">
+
+
+                                    <div class="form-group col-md-4">
+                                        <label for="inputState">Jobs</label>
+                                        <select id="inputState" class="form-control" name="jobs">
+                                            <option value="hr">HR</option>
+                                            <option value="document">Document</option>
+                                            <option value="acountant">Accountant</option>
+                                            <option value="purchase">Purchace</option>
+                                        </select>
+                                    </div>
+
+
+                                </div>
+
+                                <button type="submit" id="add-user" class="btn btn-primary">Add User</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+</section>
+
+<script>
+
+</script>
