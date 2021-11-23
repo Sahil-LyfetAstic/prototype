@@ -102,14 +102,16 @@ router.post("/primeuser-register", (req, res) => {
 });
 
 router.post("/primeuser-register-noemail", (req, res) => {
-  const collection = collection.NO_EMAIL_USER;
+
+  const coll = collection.NO_EMAIL_USER;
   const userData = {
     Domain: req.body.Domain,
     domainExtension: req.body.domainExtension,
   };
   userHelper.addDomDb(userData).then((userId) => {
-    userData.doRegister(req.body, userId, collection).then((data) => {
-      if (status == true) {
+    userHelper.doRegister(req.body, userId, coll).then((data) => {
+      console.log(data)
+      if (data) {
         const userId = req.body._id;
         const domainExtension =
           "@" + req.body.Domain + "." + req.body.domainExtension;
@@ -130,6 +132,10 @@ router.post("/primeuser-register-noemail", (req, res) => {
         res.render("user/primeuser-registration/home", {
           message: "check your personal email to continue",
         });
+      }else{
+        res.render("user/primeuser-registration/home",{
+          message:"something went wrong"
+        })
       }
     });
   });
